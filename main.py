@@ -2,6 +2,8 @@ import arcade
 import math
 from laser import Laser
 from ship import Ship
+from enemy import Enemies
+from random import randint
 
 
 
@@ -40,6 +42,7 @@ class Game(arcade.Window):
         self.equations = []
         self.lasers = []
         self.ship = Ship()
+        self.enemies = [Enemies()]
         self.begin_equations = 0
         self.score = 0
         self.alpha1_life = 255
@@ -90,6 +93,8 @@ class Game(arcade.Window):
         
         self.ship.draw()
         
+        for enemy in self.enemies:
+            enemy.draw()
 
         for laser in self.lasers:
             laser.draw()         
@@ -103,11 +108,21 @@ class Game(arcade.Window):
         :param delta_time: tells us how much time has actually elapsed
         """
         
+        if len(self.enemies) < 3 and len(self.enemies) >= 1:
+            if randint(1, 600) == 1:
+                enemy = Enemies()
+                self.enemies.append(enemy)
+            elif len(self.enemies) < 1:
+                enemy = Enemies()
+                self.enemies.append(enemy)
 
         # Tell everything to advance or move forward one step in time
             
         for laser in self.lasers:
             laser.advance()
+
+        for enemy in self.enemies:
+            enemy.advance()
         
         self.explosions_list.update()
         
