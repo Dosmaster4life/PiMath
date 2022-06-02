@@ -127,6 +127,8 @@ class Game(arcade.Window):
         self.explosions_list.update()
         
         self.ship.advance()
+
+        self.cleanup_space_particles()
         
         # Check for collisions
         self.check_collisions()
@@ -134,7 +136,7 @@ class Game(arcade.Window):
         
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         # set the ship angle in degrees
-        self.ship.angle = self._get_angle_degrees(x, y)
+        self.ship.angle = self._get_angle_degrees(self.ship.center.x - x, self.ship.center.y - y) + 90
 
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
         # Fire!
@@ -142,7 +144,7 @@ class Game(arcade.Window):
         
         shiplocation = Ship()
         
-        laserBlast = Laser(angle, shiplocation.center.x, shiplocation.center.y)
+        laserBlast = Laser(self.ship.angle, shiplocation.center.x, shiplocation.center.y)
         laserBlast.fire()
         arcade.play_sound(self.laser_blast_sound)
         self.lasers.append(laserBlast)
@@ -154,7 +156,7 @@ class Game(arcade.Window):
         """
         # get the angle in radians
         angle_radians = math.atan2(y, x)
-
+                        
         # convert to degrees
         angle_degrees = math.degrees(angle_radians)
 
@@ -181,7 +183,8 @@ class Game(arcade.Window):
         # Check collisions
         pass
     
-    
+
+
     def explode(self):
         """Draw and sound the Explosion"""
         # Make an explosion

@@ -6,7 +6,8 @@ from floating import Floating
 BULLET_RADIUS = 30
 BULLET_SPEED = 10
 BULLET_LIFE = 60
-
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
 
 """Laser Class for starting asteroids"""
 class Laser(Floating):
@@ -27,7 +28,7 @@ class Laser(Floating):
     """laser continues forward until dead"""
     def advance(self):
         super().advance()
-        self.life -= 1
-        if (self.life <= 0):
+        if self.center.x > SCREEN_WIDTH or self.center.x < 0 or self.center.y > SCREEN_HEIGHT or self.center.y < 0:
             self.alive = False
             
+
