@@ -126,8 +126,10 @@ class Game(arcade.Window):
         
         self.explosions_list.update()
         
+        # advances the ship
         self.ship.advance()
 
+        # calls for destroyed objects to be removed
         self.cleanup_space_particles()
         
         # Check for collisions
@@ -135,18 +137,17 @@ class Game(arcade.Window):
         
         
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
-        # set the ship angle in degrees
+        # set the ship angle in degrees, subtract the ship x and y from mouse x and y pass to angle function and then add 90 degrees
         self.ship.angle = self._get_angle_degrees(self.ship.center.x - x, self.ship.center.y - y) + 90
 
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
         # Fire!
-        angle = self._get_angle_degrees(x, y)
-        
-        shiplocation = Ship()
-        
-        laserBlast = Laser(self.ship.angle, shiplocation.center.x, shiplocation.center.y)
+        #uses the ship angle and location to create laser shot and set starting point and angle of laser blast
+        laserBlast = Laser(self.ship.angle, self.ship.center.x, self.ship.center.y)
+        # calls the laser fire function
         laserBlast.fire()
         arcade.play_sound(self.laser_blast_sound)
+        #appends the laser blast and sound to the laser array to be drawn
         self.lasers.append(laserBlast)
 
     def _get_angle_degrees(self, x, y):
@@ -164,7 +165,7 @@ class Game(arcade.Window):
                 
             
     def draw_lives(self):
-        """Draws the life count in the bottom corner of the screen using ship image"""
+        """Draws the life count in the bottom corner of the screen using image"""
         center_x1 = 50
         center_x2 = 90
         center_x3 = 130

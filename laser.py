@@ -5,7 +5,6 @@ from floating import Floating
 
 BULLET_RADIUS = 30
 BULLET_SPEED = 10
-BULLET_LIFE = 60
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
@@ -14,7 +13,6 @@ class Laser(Floating):
     def __init__(self, ship_angle, ship_x, ship_y):
         super().__init__("images/laserBlue.png")
         self.radius = BULLET_RADIUS
-        self.life = BULLET_LIFE
         self.angle = ship_angle + 90
         self.center.x = ship_x
         self.center.y = ship_y
@@ -25,7 +23,7 @@ class Laser(Floating):
         self.velocity.dx -= math.sin(math.radians(self.angle - 90)) * self.speed
         self.velocity.dy += math.cos(math.radians(self.angle - 90)) * self.speed
     
-    """laser continues forward until dead"""
+    """laser continues forward until dead (until edge of screen)"""
     def advance(self):
         super().advance()
         if self.center.x > SCREEN_WIDTH or self.center.x < 0 or self.center.y > SCREEN_HEIGHT or self.center.y < 0:

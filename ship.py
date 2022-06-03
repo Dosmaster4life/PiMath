@@ -7,7 +7,6 @@ from floating import Floating
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-
 SHIP_RADIUS = 30
 
 
