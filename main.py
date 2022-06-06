@@ -95,6 +95,8 @@ class Game(arcade.Window):
         
         for enemy in self.enemies:
             enemy.draw()
+            problem = enemy.problem
+            arcade.draw_text(problem.problem, problem.x_coord, problem.y_coord, problem.color, problem.size, problem.width)
 
         for laser in self.lasers:
             laser.draw()         
@@ -107,7 +109,7 @@ class Game(arcade.Window):
         Update each object in the game.
         :param delta_time: tells us how much time has actually elapsed
         """
-        
+
         if len(self.enemies) < 3 and len(self.enemies) >= 1:
             if randint(1, 600) == 1:
                 enemy = Enemies()
@@ -123,6 +125,7 @@ class Game(arcade.Window):
 
         for enemy in self.enemies:
             enemy.advance()
+            enemy.problem.set_coordinates(enemy.center.x - 21.1, enemy.center.y + 35)
         
         self.explosions_list.update()
         
