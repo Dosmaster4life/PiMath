@@ -37,8 +37,8 @@ class Game(arcade.Window):
         self.background = arcade.load_texture(background_img)
         
 
-        self.game_music = arcade.load_sound("sounds/Asteroid_chase.mp3")
-        self.laser_blast_sound = arcade.load_sound("sounds/fire.mp3")
+        self.game_music = arcade.load_sound("sounds/music.ogg")
+        self.laser_blast_sound = arcade.load_sound("sounds/laserFire.ogg")
         self.equations = []
         self.lasers = []
         self.ship = Ship()
@@ -48,7 +48,7 @@ class Game(arcade.Window):
         self.alpha1_life = 255
         self.alpha2_life = 255
         self.alpha3_life = 255
-        self.explosion_sound = arcade.load_sound("sounds/ship_explode.mp3")
+        self.explosion_sound = arcade.load_sound("sounds/explosion.wav")
         
         
         # to implement equations/answers into an array
