@@ -24,5 +24,5 @@ class Enemies(Floating):
         self.speed = 1
         self.velocity.dy = -1
 
-        self.problem = MathProblem()
+        self.problem = MathProblem(self.center.x, self.center.y)
         self.problem.set_coordinates(self.center.x - 21.1, self.center.y + 35)
