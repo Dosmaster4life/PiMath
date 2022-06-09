@@ -1,6 +1,7 @@
 import arcade
 from random import randint
 from floating import Floating
+from math_problem import MathProblem
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -22,3 +23,6 @@ class Enemies(Floating):
         self.height = 60
         self.speed = 1
         self.velocity.dy = -1
+
+        self.problem = MathProblem(self.center.x, self.center.y)
+        self.problem.set_coordinates(self.center.x - 21.1, self.center.y + 35)
