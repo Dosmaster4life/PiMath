@@ -37,8 +37,8 @@ class Game(arcade.Window):
         self.background = arcade.load_texture(background_img)
         
 
-        self.game_music = arcade.load_sound("sounds/Asteroid_chase.mp3")
-        self.laser_blast_sound = arcade.load_sound("sounds/fire.mp3")
+        self.game_music = arcade.load_sound("sounds/music.ogg")
+        self.laser_blast_sound = arcade.load_sound("sounds/laserfire (3).ogg")
         self.equations = []
         self.lasers = []
         self.ship = Ship()
@@ -48,6 +48,7 @@ class Game(arcade.Window):
         self.alpha1_life = 255
         self.alpha2_life = 255
         self.alpha3_life = 255
+        self.hitsound = arcade.load_sound("sounds/explode1.ogg")
         self.explosion_sound = arcade.load_sound("sounds/ship_explode.mp3")
         
         
@@ -62,7 +63,7 @@ class Game(arcade.Window):
         
         
         # plays the sound of the arcade.load_sound
-        arcade.play_sound(self.game_music,1,0,True)
+        arcade.play_sound(self.game_music,0.15,0,True)
         
         self.explosions_list = arcade.SpriteList()
         self.explosion_texture_list = []
@@ -189,8 +190,13 @@ class Game(arcade.Window):
         
 
     def check_collisions(self):
-        # Check collisions
-        pass
+        for enemy in self.enemies:
+            enemy.hitrange = [enemy.center.x-20, enemy.center.x+20, enemy.center.y-20, enemy.center.y+20, enemy.center.x, enemy.center.y]
+            for laser in self.lasers:
+                if enemy.hitrange[0] < laser.center.x < enemy.hitrange[1] and enemy.hitrange[2] < laser.center.y < enemy.hitrange[3] : #and answer == ship answer
+                    laser.alive = False
+                    arcade.play_sound(self.hitsound)
+                    enemy.lives = 0         
     
 
 
