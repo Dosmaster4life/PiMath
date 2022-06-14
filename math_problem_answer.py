@@ -1,9 +1,7 @@
-from arcade import Sprite
 from arcade import color
 
-class ProblemAnswer(Sprite):
+class ProblemAnswer():
     def __init__(self, answer, correct_incorrect, enemy_center_y):
-        Sprite.__init__(self)
         self.answer = answer
         self.correct = None
 

@@ -39,6 +39,7 @@ class Game(arcade.Window):
 
         self.game_music = arcade.load_sound("sounds/music.ogg")
         self.laser_blast_sound = arcade.load_sound("sounds/laserFire.ogg")
+        self.user_input = ''
         self.equations = []
         self.lasers = []
         self.ship = Ship()
@@ -92,14 +93,16 @@ class Game(arcade.Window):
         self.explosions_list.draw()
         
         self.ship.draw()
+
+        arcade.draw_text(self.user_input, SCREEN_WIDTH / 2 - 40, 100, arcade.color.WHITE, 12, 80, 'center', bold = True)
         
         for enemy in self.enemies:
             enemy.draw()
             problem = enemy.problem
-            arcade.draw_text(problem.problem, problem.x_coord, problem.y_coord, problem.color, problem.size, problem.width)
+            arcade.draw_text(problem.problem, problem.x_coord, problem.y_coord, problem.color, problem.size, problem.width, bold = True)
             answers = enemy.problem.all_answers
             for answer in answers:
-                arcade.draw_text(answer.answer, answer.text_coord_x, answer.text_coord_y, answer.text_color, answer.text_size, answer.text_width)
+                arcade.draw_text(answer.answer, answer.text_coord_x, answer.text_coord_y, answer.text_color, answer.text_size, answer.text_width, bold = True)
 
         for laser in self.lasers:
             laser.draw()         
@@ -157,6 +160,40 @@ class Game(arcade.Window):
         arcade.play_sound(self.laser_blast_sound)
         #appends the laser blast and sound to the laser array to be drawn
         self.lasers.append(laserBlast)
+        #Clear the user input
+        self.user_input = ''
+    
+    def on_key_press(self, symbol: int, modifiers: int):
+        #Check what number was pressed
+        if symbol == arcade.key.KEY_0:
+            self.user_input += '0'
+        
+        elif symbol == arcade.key.KEY_1:
+            self.user_input += '1'
+        
+        elif symbol == arcade.key.KEY_2:
+            self.user_input += '2'
+        
+        elif symbol == arcade.key.KEY_3:
+            self.user_input += '3'
+        
+        elif symbol == arcade.key.KEY_4:
+            self.user_input += '4'
+        
+        elif symbol == arcade.key.KEY_5:
+            self.user_input += '5'
+        
+        elif symbol == arcade.key.KEY_6:
+            self.user_input += '6'
+        
+        elif symbol == arcade.key.KEY_7:
+            self.user_input += '7'
+        
+        elif symbol == arcade.key.KEY_8:
+            self.user_input += '8'
+        
+        elif symbol == arcade.key.KEY_9:
+            self.user_input += '9'
 
     def _get_angle_degrees(self, x, y):
         """
