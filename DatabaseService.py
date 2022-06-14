@@ -29,10 +29,7 @@ class DatabaseService:
         self.name = "" # Will fetch from server later or will be created on first run
         self.id = "" # document id will be stored in text file locally
         self.readWriteLocalFile()
-        pass
-
-    def updateDataBase(self):
-        pass
+        self.getRecord()
 
     def createInitialRecord(self): # create if it doesn't exist
         db = firestore.client() # required to connect
@@ -68,40 +65,50 @@ class DatabaseService:
             for key, value in dictionaryObject.items():
                 fileReader.write('%s,%s\n' % (key,value))
         fileReader.close()
-        self.documentName = dictionaryObject["DOCID"]
-        self.key = dictionaryObject["KEY"]
+        self.documentName = dictionaryObject["DOCID"].strip() #removes whitespace
+        self.key = dictionaryObject["KEY"].strip()
         if(newUser):
             self.createInitialRecord()
 
-    def updateName(self, name): #Change the Name variable
-        self.name = name
-        self.updateDataBase()
-
     def updateHighScore(self,score):
         self.highScore = score
-        self.updateDataBase()
+        firestore.client().collection(u"Users").document(self.documentName).update({"highScore" : score})
 
     def updateHighestLevel(self, level):
         self.highestLevel = level
-        self.updateDataBase()
+        firestore.client().collection(u"Users").document(self.documentName).update({"highestLevel" : level})
 
     def updateKey(self, key):
         self.key = key
-        self.updateDataBase()
+        firestore.client().collection(u"Users").document(self.documentName).update({"key" : key})
 
     def updateName(self, name):
         self.name = name
-        self.updateDataBase()
+        firestore.client().collection(u"Users").document(self.documentName).update({"name" : name}) # change name in database
         
    
-    def getRecord(self): # not tested
+    def getRecords(self): # get all records
         db = firestore.client()
-        localdoc_ref = db.collection(USERS).document(self.id)
-        doc = localdoc_ref.get()
-        if doc.exists:
-            print(f'Data: {doc.to_dict()}')
-        else:
-            print(u'Document Not Found!')
-        return {doc.todict()}
+        docs = db.collection(USERS).stream()
+        for doc in docs:
+            print(f'{doc.id} => {doc.to_dict()}')
 
-db = DatabaseService() # Create user in database if local_data doesn't exist
+    def getRecord(self): # Saves cloud data locally into variables
+        db = firestore.client()
+        localdoc_ref = db.collection(u'Users').document(self.documentName).get()
+        info = localdoc_ref.to_dict()
+        self.name = info["name"]
+        self.highestLevel = info["highestLevel"]
+        self.highScore = info["highScore"]
+
+    def getScoreBoard(self):
+        pass
+
+        
+        
+        
+database = DatabaseService() # Create user in database if local_data doesn't exist
+database.updateName("Joe")
+database.updateHighestLevel(5)
+database.updateHighScore(500)
+
