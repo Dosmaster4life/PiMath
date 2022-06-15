@@ -17,8 +17,40 @@ SHIP_TURN_AMOUNT = 3
 SHIP_RADIUS = 30
 
 SCORE_HIT = 5
-        
-class Game(arcade.Window):
+
+
+class MenuView(arcade.View):
+    def on_show_view(self):
+        arcade.set_background_color(arcade.color.WHITE)
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_text("Welcome to Pi Math", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
+                         arcade.color.BLACK, font_size=50, anchor_x="center")
+        arcade.draw_text("Click to advance", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 75,
+                         arcade.color.GRAY, font_size=20, anchor_x="center")
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        instructions_view = InstructionView()
+        self.window.show_view(instructions_view)
+
+
+class InstructionView(arcade.View):
+    def on_show_view(self):
+        arcade.set_background_color(arcade.color.ORANGE_PEEL)
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_text("Shoot the correct math Answer to destroy the Enemy", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
+                         arcade.color.BLACK, font_size=40, anchor_x="center")
+        arcade.draw_text("Click to advance", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 75,
+                         arcade.color.GRAY, font_size=20, anchor_x="center")
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        game_view = GameView()
+        self.window.show_view(game_view)
+     
+class GameView(arcade.View):
     """
     This class handles all the game callbacks and interaction
     This class will then call the appropriate functions of
@@ -26,13 +58,13 @@ class Game(arcade.Window):
     You are welcome to modify anything in this class.
     """
 
-    def __init__(self, width, height):
+    def __init__(self):
         """
         Sets up the initial conditions of the game
         :param width: Screen width
         :param height: Screen height
         """
-        super().__init__(width, height)
+        super().__init__()
         background_img = 'images/tempbackground.jpg'
         self.background = arcade.load_texture(background_img)
         
@@ -263,5 +295,13 @@ class Game(arcade.Window):
     
         
 """ Creates the game and starts it going """
-window = Game(SCREEN_WIDTH, SCREEN_HEIGHT)
-arcade.run() 
+def main():
+    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Pi Math")
+    window.total_score = 0
+    menu_view = MenuView()
+    window.show_view(menu_view)
+    arcade.run() 
+
+
+if __name__ == "__main__":
+    main()
