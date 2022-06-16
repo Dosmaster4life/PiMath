@@ -68,7 +68,7 @@ class GameView(arcade.View):
         background_img = 'images/tempbackground.jpg'
         self.background = arcade.load_texture(background_img)
         
-
+        self.hitsound = arcade.load_sound("sounds/explode1.ogg")
         self.game_music = arcade.load_sound("sounds/music.ogg")
         self.laser_blast_sound = arcade.load_sound("sounds/laserFire.ogg")
         self.user_input = ''
@@ -258,8 +258,18 @@ class GameView(arcade.View):
         
 
     def check_collisions(self):
-        # Check collisions
-        pass
+        for enemy in self.enemies:
+            enemy.hitrange = [enemy.center.x-20, enemy.center.x+20, enemy.center.y-20, enemy.center.y+20, enemy.center.x, enemy.center.y]
+            for laser in self.lasers:
+                answer = True #enemy.answer would be returne here instead
+                if enemy.hitrange[0] < laser.center.x < enemy.hitrange[1] and enemy.hitrange[2] < laser.center.y < enemy.hitrange[3] and answer==True: #and answer == ship answer
+                    laser.alive = False
+                    arcade.play_sound(self.hitsound)
+                    enemy.hit = True 
+                if enemy.hitrange[0] < laser.center.x < enemy.hitrange[1] and enemy.hitrange[2] < laser.center.y < enemy.hitrange[3] and answer==False: #and answer == ship answer
+                    laser.alive = False
+                    arcade.play_sound(self.hitsound)
+                    
     
 
 
@@ -291,6 +301,12 @@ class GameView(arcade.View):
         for laser in self.lasers:
             if not laser.alive:
                 self.lasers.remove(laser)
+
+        for enemy in self.enemies:
+            if enemy.hit == True:
+                self.enemies.remove(enemy)
+
+                
                 
     
         

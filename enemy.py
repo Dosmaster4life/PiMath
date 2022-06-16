@@ -23,6 +23,6 @@ class Enemies(Floating):
         self.height = 60
         self.speed = 1
         self.velocity.dy = -1
-
+        self.hitbox = [self.center.x-20, self.center.x+20, self.center.y-20, self.center.y+20]
         self.problem = MathProblem(self.center.x, self.center.y)
         self.problem.set_coordinates(self.center.x - 21.1, self.center.y + 35)
