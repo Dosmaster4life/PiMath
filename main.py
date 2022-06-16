@@ -100,7 +100,20 @@ class LevelSelect(arcade.View):
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         game_view = GameView()
         self.window.show_view(game_view)
-     
+
+class GameOver(arcade.View):
+    def on_show_view(self):
+        arcade.set_background_color(arcade.color.BLACK_OLIVE)
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_text("GAME OVER", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
+                         arcade.color.BLACK, font_size=120, font_name="Kenney Pixel", anchor_x="center")
+
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        menu_view = MenuView()
+        self.window.show_view(menu_view)
      
 class GameView(arcade.View):
     """
@@ -263,6 +276,8 @@ class GameView(arcade.View):
         # Check for collisions
         self.check_collisions()
         
+        # Check to see if the game is over
+        self.check_game_over()
         
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         # set the ship angle in degrees, subtract the ship x and y from mouse x and y pass to angle function and then add 90 degrees
@@ -356,6 +371,11 @@ class GameView(arcade.View):
                     arcade.play_sound(self.hitsound)
                     
     
+    def check_game_over(self):
+        if (self.game_finished):
+            game_over= GameOver()
+            self.window.show_view(game_over)
+
 
 
     def explode(self):
