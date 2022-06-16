@@ -22,26 +22,52 @@ SCORE_HIT = 5
 class MenuView(arcade.View):
     def __init__(self):
         super().__init__()
-        arcade.load_font("PressStart2P-Regular.ttf")
+        # arcade.load_font("PressStart2P-Regular.ttf")
         self.state = "menu"
         self.mid_w, self.mid_h = SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2
-        self.startx, self.starty = self.mid_w, self.mid_h - 20
-        self.instrictionx, self.instrictiony = self.mid_w, self.mid_h - 70
+        self.startx, self.starty = self.mid_w, self.mid_h 
+        self.instrictionx, self.instrictiony = self.mid_w, self.mid_h - 50
+        self.selectionx1, self.selectionx2, self.selectiony1, self.selectiony2 = 320, 480, 295, 280
 
     def on_show_view(self):
         arcade.set_background_color(arcade.color.WHITE)
 
     def on_draw(self):
         self.clear()
-        arcade.draw_text('Main Menu', self.mid_w, self.mid_h + 70, arcade.color.BLACK, font_size=90, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text('Main Menu', self.mid_w, self.mid_h + 170, arcade.color.BLACK, font_size=90, font_name="Kenney Pixel", anchor_x="center")
         arcade.draw_text("Start Game", self.startx, self.starty, arcade.color.BLACK, font_size=20, anchor_x="center")
         arcade.draw_text("Instructions", self.instrictionx, self.instrictiony, arcade.color.BLACK, font_size=20, anchor_x="center")
+        arcade.draw_text("Level Select", self.mid_w, self.instrictiony - 50, arcade.color.BLACK, font_size=20, anchor_x="center")
 
-        arcade.draw_lrtb_rectangle_filled(self.mid_w - 60, self.mid_w + 60, self.starty - 10, self.starty - 20, arcade.color.BLACK)
+        arcade.draw_lrtb_rectangle_filled(self.selectionx1, self.selectionx2, self.selectiony1, self.selectiony2, arcade.color.BLACK)
+
+    def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
+        if (y < 285 and y > 235):
+            self.selectiony1 = 245
+            self.selectiony2 = 230
+            self.state = "instructions"
+        elif (y > 285):
+            self.selectiony1 = 295
+            self.selectiony2 = 280
+            self.state = "play"
+        elif (y < 235):
+            self.selectiony1 = 195
+            self.selectiony2 = 180
+            self.state = "levelselect"
+
+
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
-        instructions_view = InstructionView()
-        self.window.show_view(instructions_view)
+        if (self.state == "instructions"):
+            instructions_view = InstructionView()
+            self.window.show_view(instructions_view)
+        elif (self.state == "play"):
+            game_view = GameView()
+            self.window.show_view(game_view)
+        else:
+            level_view = LevelSelect()
+            self.window.show_view(level_view)
+
 
 
 class InstructionView(arcade.View):
@@ -58,6 +84,23 @@ class InstructionView(arcade.View):
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         game_view = GameView()
         self.window.show_view(game_view)
+
+
+class LevelSelect(arcade.View):
+    def on_show_view(self):
+        arcade.set_background_color(arcade.color.ORANGE_PEEL)
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_text("Level 1", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
+                         arcade.color.BLACK, font_size=20, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text("Level 2", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 75,
+                         arcade.color.GRAY, font_size=20, font_name="Kenny Pixel", anchor_x="center")
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        game_view = GameView()
+        self.window.show_view(game_view)
+     
      
 class GameView(arcade.View):
     """
@@ -77,7 +120,7 @@ class GameView(arcade.View):
         
 
         self.starfall_list = []
-
+        self.start_starfall()
         self.game_music = arcade.load_sound("sounds/music.ogg")
         self.laser_blast_sound = arcade.load_sound("sounds/laserFire.ogg")
         self.user_input = ''
@@ -91,6 +134,7 @@ class GameView(arcade.View):
         self.alpha2_life = 255
         self.alpha3_life = 255
         self.explosion_sound = arcade.load_sound("sounds/explosion.wav")
+        self.hitsound = arcade.load_sound("sounds/explode1.ogg")
         
         arcade.set_background_color(arcade.color.BLACK)
         # to implement equations/answers into an array
@@ -121,9 +165,9 @@ class GameView(arcade.View):
 
     def start_starfall(self):
         """ Set up starfall and initialize variables. """
-        self.starfall_list = []
+        
 
-        for i in range(50):
+        for i in range(30):
             # Create starfall instance
             star = StarFall()
 
@@ -132,10 +176,8 @@ class GameView(arcade.View):
             star.y = random.randrange(SCREEN_HEIGHT + 200)
 
             # Set other variables for the stars
-            star.size = random.randrange(7)
-            star.speed = random.randrange(2, 40)
-            #star.angle = random.uniform(math.pi, math.pi * .25)
-
+            star.size = random.randrange(5)
+            star.speed = random.randrange(20, 60)
             # Add snowflake to star list
             self.starfall_list.append(star)
         
@@ -148,7 +190,7 @@ class GameView(arcade.View):
         
         # clear the screen to begin drawing
         arcade.start_render()
-        self.start_starfall()
+        
 
          # Draw the current position of each star
         for star in self.starfall_list:
@@ -205,7 +247,7 @@ class GameView(arcade.View):
         # Animate all the star falling
         for star in self.starfall_list:
             star.y -= star.speed * delta_time * 2
-
+            
             # Check if star has fallen below screen
             if star.y < 0:
                 star.reset_pos()
