@@ -4,8 +4,8 @@ from laser import Laser
 from ship import Ship
 from enemy import Enemies
 from random import randint
-
-
+from stars import StarFall
+import random
 
 # These are Global constants to use throughout the game
 SCREEN_WIDTH = 800
@@ -20,15 +20,23 @@ SCORE_HIT = 5
 
 
 class MenuView(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.state = "menu"
+        self.mid_w, self.mid_h = SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2
+        self.startx, self.starty = self.mid_w, self.mid_h - 20
+        self.instrictionx, self.instrictiony = self.mid_w, self.mid_h - 70
+
     def on_show_view(self):
         arcade.set_background_color(arcade.color.WHITE)
 
     def on_draw(self):
         self.clear()
-        arcade.draw_text("Welcome to Pi Math", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
-                         arcade.color.BLACK, font_size=50, anchor_x="center")
-        arcade.draw_text("Click to advance", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 75,
-                         arcade.color.GRAY, font_size=20, anchor_x="center")
+        arcade.draw_text('Main Menu', self.mid_w, self.mid_h + 50, arcade.color.BLACK, font_size=40, anchor_x="center")
+        arcade.draw_text("Start Game", self.startx, self.starty, arcade.color.BLACK, font_size=20, anchor_x="center")
+        arcade.draw_text("Instructions", self.instrictionx, self.instrictiony, arcade.color.BLACK, font_size=20, anchor_x="center")
+
+        arcade.draw_lrtb_rectangle_filled(self.mid_w - 60, self.mid_w + 60, self.starty - 10, self.starty - 20, arcade.color.BLACK)
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         instructions_view = InstructionView()
@@ -42,7 +50,7 @@ class InstructionView(arcade.View):
     def on_draw(self):
         self.clear()
         arcade.draw_text("Shoot the correct math Answer to destroy the Enemy", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
-                         arcade.color.BLACK, font_size=40, anchor_x="center")
+                         arcade.color.BLACK, font_size=15, anchor_x="center")
         arcade.draw_text("Click to advance", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 75,
                          arcade.color.GRAY, font_size=20, anchor_x="center")
 
@@ -65,9 +73,9 @@ class GameView(arcade.View):
         :param height: Screen height
         """
         super().__init__()
-        background_img = 'images/tempbackground.jpg'
-        self.background = arcade.load_texture(background_img)
-        
+        # background_img = 'images/tempbackground.jpg'
+        # self.background = arcade.load_texture(background_img)
+        self.starfall_list = []
 
         self.game_music = arcade.load_sound("sounds/music.ogg")
         self.laser_blast_sound = arcade.load_sound("sounds/laserFire.ogg")
@@ -83,7 +91,7 @@ class GameView(arcade.View):
         self.alpha3_life = 255
         self.explosion_sound = arcade.load_sound("sounds/explosion.wav")
         
-        
+        arcade.set_background_color(arcade.color.BLACK)
         # to implement equations/answers into an array
         
 #         while self.begin_equations < INITIAL_ANSWER_COUNT:
@@ -92,6 +100,7 @@ class GameView(arcade.View):
             
         self.win = False
         self.game_finished = False
+        
         
         
         # plays the sound of the arcade.load_sound
@@ -109,6 +118,25 @@ class GameView(arcade.View):
         # Load the explosions from a sprite sheet
         self.explosion_texture_list = arcade.load_spritesheet(file_name, sprite_width, sprite_height, columns, count)
 
+    def start_starfall(self):
+        """ Set up starfall and initialize variables. """
+        self.starfall_list = []
+
+        for i in range(50):
+            # Create starfall instance
+            star = StarFall()
+
+            # Randomly position stars
+            star.x = random.randrange(SCREEN_WIDTH)
+            star.y = random.randrange(SCREEN_HEIGHT + 200)
+
+            # Set other variables for the stars
+            star.size = random.randrange(7)
+            star.speed = random.randrange(2, 40)
+            #star.angle = random.uniform(math.pi, math.pi * .25)
+
+            # Add snowflake to star list
+            self.starfall_list.append(star)
         
     def on_draw(self):
         """
@@ -116,11 +144,17 @@ class GameView(arcade.View):
         Handles the responsibility of drawing all elements.
         """
 
+        
         # clear the screen to begin drawing
         arcade.start_render()
-        
+        self.start_starfall()
+
+         # Draw the current position of each star
+        for star in self.starfall_list:
+            arcade.draw_circle_filled(star.x, star.y, star.size, arcade.color.WHITE)
+
         # draw each object
-        arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
+        #arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
             
         self.explosions_list.draw()
         
@@ -167,6 +201,14 @@ class GameView(arcade.View):
             for answer in enemy.problem.all_answers:
                 answer.set_y_coordinate(enemy.center.y - 45)
         
+        # Animate all the star falling
+        for star in self.starfall_list:
+            star.y -= star.speed * delta_time * 2
+
+            # Check if star has fallen below screen
+            if star.y < 0:
+                star.reset_pos()
+
         self.explosions_list.update()
         
         # advances the ship
@@ -300,6 +342,7 @@ def main():
     window.total_score = 0
     menu_view = MenuView()
     window.show_view(menu_view)
+    
     arcade.run() 
 
 
