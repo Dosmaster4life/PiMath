@@ -22,6 +22,7 @@ SCORE_HIT = 5
 class MenuView(arcade.View):
     def __init__(self):
         super().__init__()
+        arcade.load_font("PressStart2P-Regular.ttf")
         self.state = "menu"
         self.mid_w, self.mid_h = SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2
         self.startx, self.starty = self.mid_w, self.mid_h - 20
@@ -32,7 +33,7 @@ class MenuView(arcade.View):
 
     def on_draw(self):
         self.clear()
-        arcade.draw_text('Main Menu', self.mid_w, self.mid_h + 50, arcade.color.BLACK, font_size=40, anchor_x="center")
+        arcade.draw_text('Main Menu', self.mid_w, self.mid_h + 70, arcade.color.BLACK, font_size=90, font_name="Kenney Pixel", anchor_x="center")
         arcade.draw_text("Start Game", self.startx, self.starty, arcade.color.BLACK, font_size=20, anchor_x="center")
         arcade.draw_text("Instructions", self.instrictionx, self.instrictiony, arcade.color.BLACK, font_size=20, anchor_x="center")
 
@@ -74,7 +75,7 @@ class GameView(arcade.View):
         """
         super().__init__()
         
-        
+
         self.starfall_list = []
 
         self.game_music = arcade.load_sound("sounds/music.ogg")
