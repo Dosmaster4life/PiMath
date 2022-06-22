@@ -136,7 +136,8 @@ class GameView(arcade.View):
         self.start_starfall()
         self.game_music = arcade.load_sound("sounds/music.ogg")
         self.laser_blast_sound = arcade.load_sound("sounds/laserFire.ogg")
-        self.user_input = ''
+        self.user_input = '' # The user's current input
+        self.fired_answers = [] # The answers the user has fired
         self.equations = []
         self.lasers = []
         self.ship = Ship()
@@ -224,7 +225,7 @@ class GameView(arcade.View):
             arcade.draw_text(problem.problem, problem.x_coord, problem.y_coord, problem.color, problem.size, problem.width, bold = True)
             answers = enemy.problem.all_answers
             for answer in answers:
-                arcade.draw_text(answer.answer, answer.text_coord_x, answer.text_coord_y, answer.text_color, answer.text_size, answer.text_width, bold = True)
+                arcade.draw_text(answer.answer, answer.x_coord, answer.y_coord, answer.text_color, answer.text_size, answer.text_width, bold = True)
 
         for laser in self.lasers:
             laser.draw()         
@@ -292,11 +293,12 @@ class GameView(arcade.View):
         arcade.play_sound(self.laser_blast_sound)
         #appends the laser blast and sound to the laser array to be drawn
         self.lasers.append(laserBlast)
-        #Clear the user input
+        # Append the user answer to the answer list and clear input
+        self.fired_answers.append(self.user_input)
         self.user_input = ''
     
     def on_key_press(self, symbol: int, modifiers: int):
-        #Check what number was pressed
+        # Check what number was pressed
         if symbol == arcade.key.KEY_0:
             self.user_input += '0'
         
@@ -361,14 +363,38 @@ class GameView(arcade.View):
         for enemy in self.enemies:
             enemy.hitrange = [enemy.center.x-20, enemy.center.x+20, enemy.center.y-20, enemy.center.y+20, enemy.center.x, enemy.center.y]
             for laser in self.lasers:
-                answer = True #enemy.answer would be returne here instead
-                if enemy.hitrange[0] < laser.center.x < enemy.hitrange[1] and enemy.hitrange[2] < laser.center.y < enemy.hitrange[3] and answer==True: #and answer == ship answer
+                # Create targeted_enemy variable
+                targeted_enemy = False
+                
+                # Check if user entered an answer
+                if self.fired_answers != []:
+                    answer = self.fired_answers[0]
+                else:
+                    answer = None
+
+                # Check if the user's answer is the correct answer
+                if answer == enemy.problem.c_answer:
+                    is_correct = True
+                else:
+                    is_correct = False
+                
+                if enemy.hitrange[0] < laser.center.x < enemy.hitrange[1] and enemy.hitrange[2] < laser.center.y < enemy.hitrange[3] and is_correct==True: #and answer == ship answer
                     laser.alive = False
                     arcade.play_sound(self.hitsound)
-                    enemy.hit = True 
-                if enemy.hitrange[0] < laser.center.x < enemy.hitrange[1] and enemy.hitrange[2] < laser.center.y < enemy.hitrange[3] and answer==False: #and answer == ship answer
+                    enemy.hit = True
+                    targeted_enemy = True
+                if enemy.hitrange[0] < laser.center.x < enemy.hitrange[1] and enemy.hitrange[2] < laser.center.y < enemy.hitrange[3] and is_correct==False: #and answer == ship answer
                     laser.alive = False
                     arcade.play_sound(self.hitsound)
+                    targeted_enemy = True
+                
+                # Check if this is the final enemy on the last frame before the laser is removed
+                end_of_screen = laser.center.x + 10 > SCREEN_WIDTH or laser.center.x - 10 < 0 or laser.center.y + 10 > SCREEN_HEIGHT or laser.center.y - 10 < 0
+                last_enemy = enemy == self.enemies[-1]
+
+                # Remove the answer (if there is one) if this is the targeted enemy or the last enemy of the final frame
+                if self.fired_answers != [] and (targeted_enemy or (last_enemy and end_of_screen)):
+                    self.fired_answers.pop(0)
                     
     
     def check_game_over(self):
