@@ -102,13 +102,24 @@ class DatabaseService:
         self.highScore = info["highScore"]
 
     def getScoreBoard(self):
+        db = firestore.client()
+        highScores ={}
+        localdoc_ref = db.collection(u'Users').order_by("highestLevel").limit(5).stream() #highest 5 scores
+        for doc in localdoc_ref:
+            data = doc.to_dict()
+            highScores[doc.id] =  data["name"],":", data["highScore"]
+        return(highScores) # Returns a dictionary with the doc id as the key and the name:highscore as the value
+    
         pass
+    def checkLevelUpdate(self,level):
+        if(level > self.highestLevel):
+            self.updateHighestLevel(level) 
 
         
         
         
 database = DatabaseService() # Create user in database if local_data doesn't exist
-database.updateName("Joe")
 database.updateHighestLevel(5)
 database.updateHighScore(500)
+database.getScoreBoard()
 
