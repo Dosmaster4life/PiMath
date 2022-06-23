@@ -1,6 +1,8 @@
+from asyncio import shield
 import arcade
 import math
 from laser import Laser
+from shield import Shield
 from ship import Ship
 from enemy import Enemies
 from random import randint
@@ -140,6 +142,7 @@ class GameView(arcade.View):
         self.fired_answers = [] # The answers the user has fired
         self.equations = []
         self.lasers = []
+        self.shields = []
         self.ship = Ship()
         self.enemies = [Enemies()]
         self.begin_equations = 0
@@ -229,7 +232,9 @@ class GameView(arcade.View):
 
         for laser in self.lasers:
             laser.draw()         
-         
+
+        for shield in self.shields:
+            shield.draw() 
         
         self.draw_lives()
             
@@ -258,6 +263,8 @@ class GameView(arcade.View):
             for answer in enemy.problem.all_answers:
                 answer.set_y_coordinate(enemy.center.y - 45)
         
+        for shield in self.shields:
+            shield.advance()
         # Animate all the star falling
         for star in self.starfall_list:
             star.y -= star.speed * delta_time * 2
@@ -363,6 +370,17 @@ class GameView(arcade.View):
         for enemy in self.enemies:
             enemy.hitrange = [enemy.center.x-20, enemy.center.x+20, enemy.center.y-20, enemy.center.y+20, enemy.center.x, enemy.center.y]
             for laser in self.lasers:
+
+                #Starts by checking if touching a shield before doing anything
+                for shield in self.shields:
+                    #makes the generalized hitbox
+                    shield.hitrange = [shield.center.x-55, shield.center.x+55, shield.center.y-60, shield.center.y+60, shield.center.x, shield.center.y]
+                    #if the laser is found inside the shields "hitbox" remeoves the laser and plays a sound effect. Temporary sfx used.
+                    if shield.hitrange[0] < laser.center.x < shield.hitrange[1] and shield.hitrange[2] < laser.center.y < shield.hitrange[3]:
+                        laser.alive = False
+                        arcade.play_sound(self.hitsound)
+                        #skips the rest
+                        break
                 # Create targeted_enemy variable
                 targeted_enemy = False
                 
@@ -372,6 +390,7 @@ class GameView(arcade.View):
                 else:
                     answer = None
 
+                
                 # Check if the user's answer is the correct answer
                 if answer == enemy.problem.c_answer:
                     is_correct = True
@@ -383,10 +402,14 @@ class GameView(arcade.View):
                     arcade.play_sound(self.hitsound)
                     enemy.hit = True
                     targeted_enemy = True
-                if enemy.hitrange[0] < laser.center.x < enemy.hitrange[1] and enemy.hitrange[2] < laser.center.y < enemy.hitrange[3] and is_correct==False: #and answer == ship answer
+                    
+                if enemy.hitrange[0] < laser.center.x < enemy.hitrange[1] and enemy.hitrange[2] < laser.center.y < enemy.hitrange[3] and is_correct==False: #and answer != ship answer
                     laser.alive = False
                     arcade.play_sound(self.hitsound)
                     targeted_enemy = True
+                    #creates a shield the same way a laser or enemy is generated. The variables assign the sheild it's starting position.
+                    enemyshield = Shield(enemy.hitrange[4],enemy.hitrange[5])
+                    self.shields.append(enemyshield)
                 
                 # Check if this is the final enemy on the last frame before the laser is removed
                 end_of_screen = laser.center.x + 10 > SCREEN_WIDTH or laser.center.x - 10 < 0 or laser.center.y + 10 > SCREEN_HEIGHT or laser.center.y - 10 < 0
@@ -432,13 +455,16 @@ class GameView(arcade.View):
         for laser in self.lasers:
             if not laser.alive:
                 self.lasers.remove(laser)
+        #reduces Shield life (acts as a timer) removes if at zero
+        for shield in self.shields:
+            shield.life -=2
+            if shield.life <=0:
+                self.shields.remove(shield) 
 
-        for enemy in self.enemies:
+        for enemy in self.enemies:        
             if enemy.hit == True:
                 self.enemies.remove(enemy)
-
-                
-                
+              
     
         
 """ Creates the game and starts it going """
