@@ -5,7 +5,6 @@ from ship import Ship
 from enemy import Enemies
 from random import randint
 from stars import StarFall
-from MathProblemManager import MathProblemManger
 import random
 
 # These are Global constants to use throughout the game
@@ -293,7 +292,7 @@ class GameView(arcade.View):
         # clear the screen to begin drawing
         arcade.start_render()
         
-        print(self.level)
+        #print(self.level)
 
          # Draw the current position of each star
         for star in self.starfall_list:
