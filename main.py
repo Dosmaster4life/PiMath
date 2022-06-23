@@ -25,47 +25,57 @@ class MenuView(arcade.View):
         super().__init__()
         # arcade.load_font("PressStart2P-Regular.ttf")
         self.state = "menu"
+        self.level = 0
+        self.logo = arcade.load_texture("images/spaceForceLogo.png")
         self.mid_w, self.mid_h = SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2
         self.startx, self.starty = self.mid_w, self.mid_h 
         self.instrictionx, self.instrictiony = self.mid_w, self.mid_h - 50
-        self.selectionx1, self.selectionx2, self.selectiony1, self.selectiony2 = 320, 480, 295, 280
+        self.selectionx1, self.selectionx2, self.selectiony1, self.selectiony2 = 320, 480, 325, 295
         self.background = arcade.load_texture("images/SpaceWallpaper1920x672.png")
 
     def on_draw(self):
         self.clear()
         arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
-        arcade.draw_text('Main Menu', self.mid_w, self.mid_h + 170, arcade.color.WHITE_SMOKE, font_size=90, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_lrwh_rectangle_textured(SCREEN_WIDTH / 2 - 75 , SCREEN_HEIGHT - 150, 150, 120, self.logo,0,255)
+        arcade.draw_text('Main Menu', self.mid_w, SCREEN_HEIGHT - 225, arcade.color.WHITE_SMOKE, font_size=90, font_name="Kenney Pixel", anchor_x="center")
         arcade.draw_text("Start Game", self.startx, self.starty, arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
         arcade.draw_text("Instructions", self.instrictionx, self.instrictiony, arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
         arcade.draw_text("Level Select", self.mid_w, self.instrictiony - 50, arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
-        arcade.draw_lrtb_rectangle_filled(self.selectionx1, self.selectionx2, self.selectiony1, self.selectiony2, arcade.color.WHITE_SMOKE)
+        arcade.draw_text("High Scores", self.mid_w, self.instrictiony - 100, arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
+        arcade.draw_lrtb_rectangle_filled(self.selectionx1, self.selectionx2, self.selectiony1, self.selectiony2,  color=(245, 245, 245, 45))
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
-        if (y < 285 and y > 235):
-            self.selectiony1 = 245
-            self.selectiony2 = 230
-            self.state = "instructions"
-        elif (y > 285):
-            self.selectiony1 = 295
-            self.selectiony2 = 280
-            self.state = "play"
+        if (y < 185):
+            self.selectiony1 = 175
+            self.selectiony2 = 145
+            self.state = "highscore"
         elif (y < 235):
-            self.selectiony1 = 195
-            self.selectiony2 = 180
+            self.selectiony1 = 225
+            self.selectiony2 = 195
             self.state = "levelselect"
-
-
+        elif (y < 285):
+            self.selectiony1 = 275
+            self.selectiony2 = 245
+            self.state = "instructions"
+        else:
+            self.selectiony1 = 325
+            self.selectiony2 = 295
+            self.state = "play"
+       
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         if (self.state == "instructions"):
             instructions_view = InstructionView()
             self.window.show_view(instructions_view)
         elif (self.state == "play"):
-            game_view = GameView()
+            game_view = GameView(self.level)
             self.window.show_view(game_view)
-        else:
+        elif (self.state == "levelselect"):
             level_view = LevelSelect()
             self.window.show_view(level_view)
+        else:
+            highscore_view = HighScore()
+            self.window.show_view(highscore_view)
 
 
 
@@ -73,17 +83,19 @@ class InstructionView(arcade.View):
     def __init__(self):
         super().__init__()
         self.background = arcade.load_texture("images/spacestation2.png")
+        self.logo = arcade.load_texture("images/spaceForceLogo.png")
         self.start = False
-        self.line1 = "The year is 4050 and life lives in the final frontier"
+        self.level = 0
+        self.line1 = "The year is 4050 and Humanity lives in the final frontier"
         self.line2 = "We are being assaulted by an alien force intent"
         self.line3 = "on eliminating the human race."
         self.line4 = "You the lead Space Force Pilot must save us"
         self.line5 = "NEXT"
-        
+
     def on_draw(self):
         self.clear()
         arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
-
+        arcade.draw_lrwh_rectangle_textured(SCREEN_WIDTH /2 - 75, SCREEN_HEIGHT - 150, 150, 120, self.logo,0,255)
 
         arcade.draw_text(self.line1, SCREEN_WIDTH -30, SCREEN_HEIGHT / 2 + 10, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="right")
         arcade.draw_text(self.line2, SCREEN_WIDTH -30, SCREEN_HEIGHT / 2 - 30, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="right")
@@ -100,38 +112,97 @@ class InstructionView(arcade.View):
             self.line5 = "Click to Begin your Mission!"
             self.start = True        
         else:
-            game_view = GameView()
+            game_view = GameView(self.level)
             self.window.show_view(game_view)
 
 
 class LevelSelect(arcade.View):
-    def on_show_view(self):
-        arcade.set_background_color(arcade.color.ORANGE_PEEL)
+    def __init__(self):
+        super().__init__()
+        self.state = "menu"
+        self.level = 0
+        self.selectionx1, self.selectionx2, self.selectiony1, self.selectiony2 = 200, 600, 330, 290
+        self.background = arcade.load_texture("images/spacestation.png")
+        self.logo = arcade.load_texture("images/spaceForceLogo.png")
+
 
     def on_draw(self):
         self.clear()
-        arcade.draw_text("Level 1", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
-                         arcade.color.BLACK, font_size=20, font_name="Kenney Pixel", anchor_x="center")
-        arcade.draw_text("Level 2", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 75,
-                         arcade.color.GRAY, font_size=20, font_name="Kenny Pixel", anchor_x="center")
+        arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
+        arcade.draw_lrwh_rectangle_textured(SCREEN_WIDTH / 2 - 75 , SCREEN_HEIGHT - 150, 150, 120, self.logo,0,255)
+
+        arcade.draw_text("LEVEL SELECT", SCREEN_WIDTH / 2, 390, arcade.color.WHITE_SMOKE, font_size=50, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text("Small Human", SCREEN_WIDTH / 2, 300, arcade.color.WHITE_SMOKE, font_size=40, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text("large Human", SCREEN_WIDTH / 2, 250, arcade.color.WHITE_SMOKE, font_size=40, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text("Robot's Bane", SCREEN_WIDTH / 2, 200, arcade.color.WHITE_SMOKE, font_size=40, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text("Cyborg Destroyer", SCREEN_WIDTH / 2, 150, arcade.color.WHITE_SMOKE, font_size=40, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_lrtb_rectangle_filled(self.selectionx1, self.selectionx2, self.selectiony1, self.selectiony2, color=(245, 245, 245, 45))
+
+
+
+    def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
+        if (y < 175):
+            self.selectiony1 = 180
+            self.selectiony2 = 140
+            self.level = 10           
+        elif (y < 225):
+            self.selectiony1 = 230
+            self.selectiony2 = 190
+            self.level = 7
+        elif (y < 275):
+            self.selectiony1 = 280
+            self.selectiony2 = 240
+            self.level = 3
+        else:
+            self.selectiony1 = 330
+            self.selectiony2 = 290
+            self.level = 0
+
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
-        game_view = GameView()
+        game_view = GameView(self.level)
+        #end_view = GameOver(90)
         self.window.show_view(game_view)
 
 class GameOver(arcade.View):
-    def on_show_view(self):
-        arcade.set_background_color(arcade.color.BLACK_OLIVE)
+    def __init__(self, score):
+        super().__init__()
+        self.background = arcade.load_texture("images/SpaceWallpaper1920x672.png")
+        self.logo = arcade.load_texture("images/spaceForceLogo.png")
+        self.score = score
 
     def on_draw(self):
         self.clear()
-        arcade.draw_text("GAME OVER", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
-                         arcade.color.BLACK, font_size=120, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_lrwh_rectangle_textured(SCREEN_WIDTH /2 - 75, SCREEN_HEIGHT - 150, 150, 120, self.logo,0,255)
+        arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
+        arcade.draw_text("GAME OVER", SCREEN_WIDTH / 2, 355, arcade.color.WHITE_SMOKE, font_size=120, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text("Your score is:", SCREEN_WIDTH / 2, 280, arcade.color.WHITE_SMOKE, font_size=50, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text(self.score, SCREEN_WIDTH / 2, 210, arcade.color.WHITE_SMOKE, font_size=70, font_name="Kenney Pixel", anchor_x="center")
+
+        arcade.draw_text("click anywhere to return to main menu", SCREEN_WIDTH / 2, 20, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
 
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         menu_view = MenuView()
         self.window.show_view(menu_view)
+
+class HighScore(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.background = arcade.load_texture("images/SpaceWallpaper1920x672.png")
+            
+    def on_draw(self):
+        self.clear()
+        arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
+        arcade.draw_text("Hero Hall of Fame", SCREEN_WIDTH / 2, 520, arcade.color.WHITE_SMOKE, font_size=80, font_name="Kenney Pixel", anchor_x="center")
+
+        arcade.draw_text("click anywhere to return to main menu", SCREEN_WIDTH / 2, 20, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
+
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        menu_view = MenuView()
+        self.window.show_view(menu_view)
+     
      
 class GameView(arcade.View):
     """
@@ -141,7 +212,7 @@ class GameView(arcade.View):
     You are welcome to modify anything in this class.
     """
 
-    def __init__(self):
+    def __init__(self, level):
         """
         Sets up the initial conditions of the game
         :param width: Screen width
@@ -149,7 +220,7 @@ class GameView(arcade.View):
         """
         super().__init__()
         
-
+        self.level = level
         self.starfall_list = []
         self.start_starfall()
         self.game_music = arcade.load_sound("sounds/music.ogg")
@@ -222,6 +293,7 @@ class GameView(arcade.View):
         # clear the screen to begin drawing
         arcade.start_render()
         
+        print(self.level)
 
          # Draw the current position of each star
         for star in self.starfall_list:
@@ -391,7 +463,7 @@ class GameView(arcade.View):
     
     def check_game_over(self):
         if (self.game_finished):
-            game_over= GameOver()
+            game_over= GameOver(self.score)
             self.window.show_view(game_over)
 
 
