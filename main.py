@@ -5,6 +5,7 @@ from ship import Ship
 from enemy import Enemies
 from random import randint
 from stars import StarFall
+from MathProblemManager import MathProblemManger
 import random
 
 # These are Global constants to use throughout the game
@@ -28,18 +29,16 @@ class MenuView(arcade.View):
         self.startx, self.starty = self.mid_w, self.mid_h 
         self.instrictionx, self.instrictiony = self.mid_w, self.mid_h - 50
         self.selectionx1, self.selectionx2, self.selectiony1, self.selectiony2 = 320, 480, 295, 280
-
-    def on_show_view(self):
-        arcade.set_background_color(arcade.color.WHITE)
+        self.background = arcade.load_texture("images/SpaceWallpaper1920x672.png")
 
     def on_draw(self):
         self.clear()
-        arcade.draw_text('Main Menu', self.mid_w, self.mid_h + 170, arcade.color.BLACK, font_size=90, font_name="Kenney Pixel", anchor_x="center")
-        arcade.draw_text("Start Game", self.startx, self.starty, arcade.color.BLACK, font_size=20, anchor_x="center")
-        arcade.draw_text("Instructions", self.instrictionx, self.instrictiony, arcade.color.BLACK, font_size=20, anchor_x="center")
-        arcade.draw_text("Level Select", self.mid_w, self.instrictiony - 50, arcade.color.BLACK, font_size=20, anchor_x="center")
-
-        arcade.draw_lrtb_rectangle_filled(self.selectionx1, self.selectionx2, self.selectiony1, self.selectiony2, arcade.color.BLACK)
+        arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
+        arcade.draw_text('Main Menu', self.mid_w, self.mid_h + 170, arcade.color.WHITE_SMOKE, font_size=90, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text("Start Game", self.startx, self.starty, arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
+        arcade.draw_text("Instructions", self.instrictionx, self.instrictiony, arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
+        arcade.draw_text("Level Select", self.mid_w, self.instrictiony - 50, arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
+        arcade.draw_lrtb_rectangle_filled(self.selectionx1, self.selectionx2, self.selectiony1, self.selectiony2, arcade.color.WHITE_SMOKE)
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         if (y < 285 and y > 235):
@@ -71,19 +70,38 @@ class MenuView(arcade.View):
 
 
 class InstructionView(arcade.View):
-    def on_show_view(self):
-        arcade.set_background_color(arcade.color.ORANGE_PEEL)
-
+    def __init__(self):
+        super().__init__()
+        self.background = arcade.load_texture("images/spacestation2.png")
+        self.start = False
+        self.line1 = "The year is 4050 and life lives in the final frontier"
+        self.line2 = "We are being assaulted by an alien force intent"
+        self.line3 = "on eliminating the human race."
+        self.line4 = "You the lead Space Force Pilot must save us"
+        self.line5 = "NEXT"
+        
     def on_draw(self):
         self.clear()
-        arcade.draw_text("Shoot the correct math Answer to destroy the Enemy", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
-                         arcade.color.BLACK, font_size=15, anchor_x="center")
-        arcade.draw_text("Click to advance", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 75,
-                         arcade.color.GRAY, font_size=20, anchor_x="center")
+        arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
+
+
+        arcade.draw_text(self.line1, SCREEN_WIDTH -30, SCREEN_HEIGHT / 2 + 10, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="right")
+        arcade.draw_text(self.line2, SCREEN_WIDTH -30, SCREEN_HEIGHT / 2 - 30, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="right")
+        arcade.draw_text(self.line3, SCREEN_WIDTH -30, SCREEN_HEIGHT / 2 - 70, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="right")
+        arcade.draw_text(self.line4, SCREEN_WIDTH -30, SCREEN_HEIGHT / 2 - 110, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="right")
+        arcade.draw_text(self.line5, SCREEN_WIDTH -30, SCREEN_HEIGHT / 2 - 190, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="right")
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
-        game_view = GameView()
-        self.window.show_view(game_view)
+        if self.start == False:
+            self.line1 = "Hack the enemy shields by typing in the answer"
+            self.line2 = "to the equation (type the answer to the problem)"
+            self.line3 = "then fire your blaster (left click your mouse)"
+            self.line4 = "and lay waste to the goat-face softshell squids!"
+            self.line5 = "Click to Begin your Mission!"
+            self.start = True        
+        else:
+            game_view = GameView()
+            self.window.show_view(game_view)
 
 
 class LevelSelect(arcade.View):
