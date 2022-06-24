@@ -2,6 +2,7 @@ import arcade
 from random import randint
 from floating import Floating
 from math_problem import MathProblem
+from shield import Shield
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -26,3 +27,5 @@ class Enemies(Floating):
         self.hitbox = [self.center.x-20, self.center.x+20, self.center.y-20, self.center.y+20]
         self.problem = MathProblem(self.center.x, self.center.y)
         self.problem.set_coordinates(self.center.x - 21.1, self.center.y + 35)
+        self.shield = Shield(self.center.x, self.center.y)
+        self.shieldlife = 0
