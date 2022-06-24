@@ -1,6 +1,6 @@
 import random
 import operator
-
+import DatabaseService;
 
 class MathProblemManger:
 
@@ -20,8 +20,8 @@ class MathProblemManger:
             return "*"
         elif self.level < 10:
             return "/"
-        elif self.level == 10:
-            return "/"
+        else:
+            return "+"
 
 
     def __levelZero(self):
@@ -185,15 +185,104 @@ class MathProblemManger:
         }
         return problems
 
-   # def __levelTen(self):
-        #li = [self.__levelNine(), self.__levelSix()]
-       # random.choice(li)()
+    def __levelTen(self):
+        n1 = random.randint(100, 200)
+        n2 = random.randint(100, 200)
+        opChoice = self.chooseOperator()
+        nRight = self.convertOperator[opChoice](n1, n2)
+        nWrong1 = random.choice([i for i in range(nRight - 5, nRight + 5) if i != nRight])
+        nWrong2 = random.choice([i for i in range(nRight - 5, nRight + 5) if i != nRight and i != nWrong1])
+        problem = str(n1) + opChoice + str(n2)
+        op = self.chooseOperator()
+        problems = {
+            nRight: problem +  "," + str(nRight) + "," + "C",
+            nWrong1: problem +  "," + str(nWrong1)+ "," + "W",
+            nWrong2: problem +  "," + str(nWrong2)+ "," + "W",
+        }
+        return problems
+    def __levelEleven(self):
+        n1 = random.randint(200, 400)
+        n2 = random.randint(100, 200)
+        opChoice = self.chooseOperator()
+        nRight = self.convertOperator[opChoice](n1, n2)
+        nWrong1 = random.choice([i for i in range(nRight - 5, nRight + 5) if i != nRight])
+        nWrong2 = random.choice([i for i in range(nRight - 5, nRight + 5) if i != nRight and i != nWrong1])
+        problem = str(n1) + opChoice + str(n2)
+        op = self.chooseOperator()
+        problems = {
+            nRight: problem +  "," + str(nRight) + "," + "C",
+            nWrong1: problem +  "," + str(nWrong1)+ "," + "W",
+            nWrong2: problem +  "," + str(nWrong2)+ "," + "W",
+        }
+        return problems
+    def __levelTwelve(self):
+        n1 = random.randint(500, 700)
+        n2 = random.randint(100, 200)
+        opChoice = self.chooseOperator()
+        nRight = self.convertOperator[opChoice](n1, n2)
+        nWrong1 = random.choice([i for i in range(nRight - 5, nRight + 5) if i != nRight])
+        nWrong2 = random.choice([i for i in range(nRight - 5, nRight + 5) if i != nRight and i != nWrong1])
+        problem = str(n1) + opChoice + str(n2)
+        op = self.chooseOperator()
+        problems = {
+            nRight: problem +  "," + str(nRight) + "," + "C",
+            nWrong1: problem +  "," + str(nWrong1)+ "," + "W",
+            nWrong2: problem +  "," + str(nWrong2)+ "," + "W",
+        }
+        return problems
+    def __levelThirteen(self):
+        n1 = random.randint(700, 999)
+        n2 = random.randint(100, 200)
+        opChoice = self.chooseOperator()
+        nRight = self.convertOperator[opChoice](n1, n2)
+        nWrong1 = random.choice([i for i in range(nRight - 5, nRight + 5) if i != nRight])
+        nWrong2 = random.choice([i for i in range(nRight - 5, nRight + 5) if i != nRight and i != nWrong1])
+        problem = str(n1) + opChoice + str(n2)
+        op = self.chooseOperator()
+        problems = {
+            nRight: problem +  "," + str(nRight) + "," + "C",
+            nWrong1: problem +  "," + str(nWrong1)+ "," + "W",
+            nWrong2: problem +  "," + str(nWrong2)+ "," + "W",
+        }
+        return problems
+    def __levelFourteen(self):
+        n1 = random.randint(500, 999)
+        n2 = random.randint(500, 999)
+        opChoice = self.chooseOperator()
+        nRight = self.convertOperator[opChoice](n1, n2)
+        nWrong1 = random.choice([i for i in range(nRight - 5, nRight + 5) if i != nRight])
+        nWrong2 = random.choice([i for i in range(nRight - 5, nRight + 5) if i != nRight and i != nWrong1])
+        problem = str(n1) + opChoice + str(n2)
+        op = self.chooseOperator()
+        problems = {
+            nRight: problem +  "," + str(nRight) + "," + "C",
+            nWrong1: problem +  "," + str(nWrong1)+ "," + "W",
+            nWrong2: problem +  "," + str(nWrong2)+ "," + "W",
+        }
+        return problems
+    def __levelFifteen(self):
+        n1 = random.randint(800, 999)
+        n2 = random.randint(800, 999)
+        opChoice = self.chooseOperator()
+        nRight = self.convertOperator[opChoice](n1, n2)
+        nWrong1 = random.choice([i for i in range(nRight - 5, nRight + 5) if i != nRight])
+        nWrong2 = random.choice([i for i in range(nRight - 5, nRight + 5) if i != nRight and i != nWrong1])
+        problem = str(n1) + opChoice + str(n2)
+        op = self.chooseOperator()
+        problems = {
+            nRight: problem +  "," + str(nRight) + "," + "C",
+            nWrong1: problem +  "," + str(nWrong1)+ "," + "W",
+            nWrong2: problem +  "," + str(nWrong2)+ "," + "W",
+        }
+        return problems
+        
 
     def difficultyChecker(self):
         if self.correctAnswers > 20:  # If a user gets 20 correct missing less than 3 then level up
             self.level += 1
             self.correctAnswers = 0
             self.incorrectAnswers = 0
+           
         elif self.incorrectAnswers < -2:  # Go down a level
             if self.level > 1:
                 self.level -= 1
@@ -224,8 +313,17 @@ class MathProblemManger:
             return self.__levelNine()
         elif self.level == 10:
             return self.__levelTen()
-        else:
-            return self.__levelTen()
+        elif self.level == 11:
+            return self.__levelEleven()
+        elif self.level == 12:
+            return self.__levelTwelve()
+        elif self.level == 13:
+            return self.__levelThirteen()
+        elif self.level == 14:
+            return self.__levelFourteen()
+        elif self.level == 15:
+            return self.__levelFifteen()
+        
 
 
 m = MathProblemManger()
@@ -249,5 +347,15 @@ m.level = 8
 print(m.generateProblem())
 m.level = 9
 print(m.generateProblem())
-#m.level = 10
-#print(m.generateProblem())
+m.level = 10
+print(m.generateProblem())
+m.level = 11
+print(m.generateProblem())
+m.level = 12
+print(m.generateProblem())
+m.level = 13
+print(m.generateProblem())
+m.level = 14
+print(m.generateProblem())
+m.level = 15
+print(m.generateProblem())
