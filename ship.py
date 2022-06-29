@@ -13,7 +13,7 @@ SHIP_RADIUS = 30
 """Ship Class for starting asteroids"""
 class Ship(Floating):
     def __init__(self):
-        super().__init__("images/playerShip3_orange.png")
+        super().__init__("images/starship.png")
         self.radius = SHIP_RADIUS
         self.center.x = SCREEN_WIDTH / 2
         self.center.y =  50

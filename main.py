@@ -90,7 +90,7 @@ class InstructionView(arcade.View):
         self.line1 = "The year is 4050 and Humanity lives in the final frontier"
         self.line2 = "We are being assaulted by an alien force intent"
         self.line3 = "on eliminating the human race."
-        self.line4 = "You the lead Space Force Pilot must save us"
+        self.line4 = "You, the lead Space Force Pilot must save us"
         self.line5 = "NEXT"
 
     def on_draw(self):
@@ -222,6 +222,7 @@ class GameView(arcade.View):
         super().__init__()
         
         self.level = level
+        self.star_speed = 1.45
         self.starfall_list = []
         self.start_starfall()
         self.game_music = arcade.load_sound("sounds/music.ogg")
@@ -240,8 +241,9 @@ class GameView(arcade.View):
         self.alpha3_life = 255
         self.explosion_sound = arcade.load_sound("sounds/explosion.wav")
         self.hitsound = arcade.load_sound("sounds/explode1.ogg")
-        
-        arcade.set_background_color(arcade.color.BLACK)
+        self.background = arcade.color.BLACK
+        arcade.set_background_color(self.background)
+        #self.star_angle = randint(1, 180)
         # to implement equations/answers into an array
         
 #         while self.begin_equations < INITIAL_ANSWER_COUNT:
@@ -283,6 +285,7 @@ class GameView(arcade.View):
             # Set other variables for the stars
             star.size = random.randrange(5)
             star.speed = random.randrange(20, 60)
+            star.angle = random.randrange(1, 180)
             # Add snowflake to star list
             self.starfall_list.append(star)
         
@@ -300,7 +303,7 @@ class GameView(arcade.View):
 
          # Draw the current position of each star
         for star in self.starfall_list:
-            arcade.draw_circle_filled(star.x, star.y, star.size, arcade.color.WHITE)
+            arcade.draw_rectangle_outline(star.x, star.y, star.size, star.size, arcade.color.WHITE, tilt_angle=star.angle)
 
         # draw each object
         #arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
@@ -356,7 +359,8 @@ class GameView(arcade.View):
             shield.advance()
         # Animate all the star falling
         for star in self.starfall_list:
-            star.y -= star.speed * delta_time * 2
+            star.y -= star.speed * delta_time * self.star_speed
+            star.angle += 5
             
             # Check if star has fallen below screen
             if star.y < 0:
@@ -533,7 +537,27 @@ class GameView(arcade.View):
         arcade.play_sound(self.explosion_sound)
 
             
-    
+    def level_up(self):
+        """
+        Checks to see what level the game is on 
+        and changes background variables and starfall speed.
+        """
+
+        if self.level > 2:
+            self.background = arcade.color.BLACK_LEATHER_JACKET
+            self.star_speed = 2
+        elif self.level > 4:
+            self.background = arcade.color.SAE
+            self.star_speed = 3
+        elif self.level > 7:
+            self.background = arcade.color.BOYSENBERRY
+            self.star_speed = 4
+        elif self.level > 10:
+            self.background = arcade.color.BYZANTIUM
+            self.star_speed = 5
+        else:
+            self.background = arcade.color.BLACK
+            self.star_speed = 1.45
     
     def cleanup_space_particles(self):
         """
