@@ -7,6 +7,7 @@ from ship import Ship
 from enemy import Enemies
 from random import randint
 from stars import StarFall
+from difficulty_manager import Difficulty
 import random
 
 # These are Global constants to use throughout the game
@@ -20,6 +21,7 @@ SHIP_RADIUS = 30
 
 SCORE_HIT = 5
 
+difficulty = Difficulty()
 
 class MenuView(arcade.View):
     def __init__(self):
@@ -335,12 +337,9 @@ class GameView(arcade.View):
         Update each object in the game.
         :param delta_time: tells us how much time has actually elapsed
         """
-
-        if len(self.enemies) < 3 and len(self.enemies) >= 1:
+        
+        if len(self.enemies) < difficulty.getEnemyCount():
             if randint(1, 600) == 1:
-                enemy = Enemies()
-                self.enemies.append(enemy)
-            elif len(self.enemies) < 1:
                 enemy = Enemies()
                 self.enemies.append(enemy)
 
@@ -487,8 +486,10 @@ class GameView(arcade.View):
                 # Check if the user's answer is the correct answer
                 if answer == enemy.problem.c_answer:
                     is_correct = True
+                    difficulty.correctAnswers += 1
                 else:
                     is_correct = False
+                    difficulty.incorrectAnswers += 1
                 
                 if enemy.hitrange[0] < laser.center.x < enemy.hitrange[1] and enemy.hitrange[2] < laser.center.y < enemy.hitrange[3] and is_correct==True: #and answer == ship answer
                     laser.alive = False
