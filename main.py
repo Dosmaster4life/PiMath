@@ -8,6 +8,8 @@ from enemy import Enemies
 from random import randint
 from stars import StarFall
 from difficulty_manager import Difficulty
+from DatabaseService import DatabaseService
+import arcade.gui as gui
 import random
 
 # These are Global constants to use throughout the game
@@ -22,6 +24,46 @@ SHIP_RADIUS = 30
 SCORE_HIT = 5
 
 difficulty = Difficulty()
+
+class NameView(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.state = ""
+        self.logo = arcade.load_texture("images/spaceForceLogo.png")
+        self.mid_w, self.mid_h = SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2
+        self.selectionx1, self.selectionx2, self.selectiony1, self.selectiony2 = 320, 480, 325, 295
+        self.background = arcade.load_texture("images/SpaceWallpaper1920x672.png")
+        self.name = ""
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
+        arcade.draw_lrwh_rectangle_textured(SCREEN_WIDTH / 2 - 75 , SCREEN_HEIGHT - 150, 150, 120, self.logo,0,255)
+        arcade.draw_text('Please Enter Your Name', self.mid_w, SCREEN_HEIGHT - 225, arcade.color.WHITE_SMOKE, font_size=50, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_lrtb_rectangle_outline(self.mid_w - 300, self.mid_w + 300 , SCREEN_HEIGHT - 235,SCREEN_HEIGHT - 295, arcade.color.WHITE_SMOKE)
+        arcade.draw_text('Submit', self.mid_w, SCREEN_HEIGHT - 375, arcade.color.WHITE_SMOKE, font_size=40, font_name="Kenney Pixel", anchor_x="center")
+
+
+    def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
+        if (y < 275 and y > 225 and x < 500 and x > 100):
+            self.selectiony1 = 275
+            self.selectiony2 = 245
+            self.state = "submit"
+        elif (y < 365 and y > 305 and (x < 500 and x > 100)):
+            self.selectiony1 = 325
+            self.selectiony2 = 295
+            self.state = "name"
+        else:
+            self.state = ""
+       
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        if (self.state == "submit"):
+            menu_view = MenuView()
+            self.window.show_view(menu_view)
+        
+
+
 
 class MenuView(arcade.View):
     def __init__(self):
@@ -45,10 +87,15 @@ class MenuView(arcade.View):
         arcade.draw_text("Instructions", self.instrictionx, self.instrictiony, arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
         arcade.draw_text("Level Select", self.mid_w, self.instrictiony - 50, arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
         arcade.draw_text("High Scores", self.mid_w, self.instrictiony - 100, arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
+        arcade.draw_text("Quit Game", self.mid_w, self.instrictiony - 150, arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
         arcade.draw_lrtb_rectangle_filled(self.selectionx1, self.selectionx2, self.selectiony1, self.selectiony2,  color=(245, 245, 245, 45))
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
-        if (y < 185):
+        if (y< 135):
+            self.selectiony1 = 125
+            self.selectiony2 = 95
+            self.state = "quit"
+        elif (y < 185):
             self.selectiony1 = 175
             self.selectiony2 = 145
             self.state = "highscore"
@@ -67,7 +114,9 @@ class MenuView(arcade.View):
        
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
-        if (self.state == "instructions"):
+        if(self.state == "quit"):
+            arcade.exit()
+        elif (self.state == "instructions"):
             instructions_view = InstructionView()
             self.window.show_view(instructions_view)
         elif (self.state == "play"):
@@ -193,18 +242,29 @@ class HighScore(arcade.View):
     def __init__(self):
         super().__init__()
         self.background = arcade.load_texture("images/SpaceWallpaper1920x672.png")
+        self.score_list = DatabaseService.getScoreBoard(5)
+        
+        
             
     def on_draw(self):
         self.clear()
         arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
         arcade.draw_text("Hero Hall of Fame", SCREEN_WIDTH / 2, 520, arcade.color.WHITE_SMOKE, font_size=80, font_name="Kenney Pixel", anchor_x="center")
 
-        arcade.draw_text("click anywhere to return to main menu", SCREEN_WIDTH / 2, 20, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text("Hero Hall of Fame", SCREEN_WIDTH / 2, 520, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text("Hero Hall of Fame", SCREEN_WIDTH / 2, 520, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text("Hero Hall of Fame", SCREEN_WIDTH / 2, 520, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text("Hero Hall of Fame", SCREEN_WIDTH / 2, 520, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text("", SCREEN_WIDTH / 2, 520, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
 
+        arcade.draw_text("click anywhere to return to main menu", SCREEN_WIDTH / 2, 20, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
+        
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
-        menu_view = MenuView()
-        self.window.show_view(menu_view)
+        # menu_view = MenuView()
+        # self.window.show_view(menu_view)
+        for x in self.score_list:
+            print(x[0:1])
      
      
 class GameView(arcade.View):
@@ -342,6 +402,11 @@ class GameView(arcade.View):
             if randint(1, 600) == 1:
                 enemy = Enemies()
                 self.enemies.append(enemy)
+                if difficulty.level > self.level:
+                    self.level = difficulty.level
+
+
+
 
         # Tell everything to advance or move forward one step in time
             
@@ -369,6 +434,8 @@ class GameView(arcade.View):
         
         # advances the ship
         self.ship.advance()
+
+        self.level_up()
 
         # calls for destroyed objects to be removed
         self.cleanup_space_particles()
@@ -545,7 +612,7 @@ class GameView(arcade.View):
         """
 
         if self.level > 2:
-            self.background = arcade.color.BLACK_LEATHER_JACKET
+            self.background = arcade.color.BLUE_VIOLET
             self.star_speed = 2
         elif self.level > 4:
             self.background = arcade.color.SAE
@@ -559,7 +626,8 @@ class GameView(arcade.View):
         else:
             self.background = arcade.color.BLACK
             self.star_speed = 1.45
-    
+        arcade.set_background_color(self.background)
+
     def cleanup_space_particles(self):
         """
         Removes any dead lasers from the list.
@@ -585,8 +653,8 @@ class GameView(arcade.View):
 def main():
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, "Pi Math")
     window.total_score = 0
-    menu_view = MenuView()
-    window.show_view(menu_view)
+    start = NameView()
+    window.show_view(start)
     
     arcade.run() 
 

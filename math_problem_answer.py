@@ -4,7 +4,6 @@ class ProblemAnswer():
     def __init__(self, answer, correct_incorrect, enemy_center_y):
         self.answer = answer # The answer choice
         self.correct = None # Whether or not the answer choice is correct
-
         self.x_coord = None
         self.y_coord = enemy_center_y - 45
         self.text_color = color.WHITE
@@ -17,6 +16,7 @@ class ProblemAnswer():
         # Check whether the answer choice is correct or incorrect
         if correct_incorrect == 'C':
             self.correct = True
+            self.hit_count +=1
         else:
             self.correct = False
         
