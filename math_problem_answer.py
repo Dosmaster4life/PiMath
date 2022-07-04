@@ -2,6 +2,7 @@ from arcade import color
 
 class ProblemAnswer():
     def __init__(self, answer, correct_incorrect, enemy_center_y):
+        '''The class constructor.'''
         self.answer = answer # The answer choice
         self.correct = None # Whether or not the answer choice is correct
 
@@ -14,16 +15,16 @@ class ProblemAnswer():
         self._set_correct(correct_incorrect)
     
     def _set_correct(self, correct_incorrect):
-        # Check whether the answer choice is correct or incorrect
+        '''Checks whether the answer choice given is correct or incorrect.'''
         if correct_incorrect == 'C':
             self.correct = True
         else:
             self.correct = False
         
     def set_y_coordinate(self, y_coord):
-        # Set the y coordinate
+        '''Sets the y-coordinate of the answer choice.'''
         self.y_coord = y_coord
     
     def select_center_x(self, selection):
-        # Set the center x coordinate based on the selection passed to the function
+        '''Sets the x-coordinate based on the selection that is passed in.'''
         self.x_coord = selection

@@ -5,6 +5,7 @@ from math_problem_answer import ProblemAnswer
 
 class MathProblem():
     def __init__(self, enemy_center_x, enemy_center_y):
+        '''The class constructor.'''
         self.problem = None # The generated math problem
         self.c_answer = None # The correct answer to the problem
         self.all_answers = None # All of the answer choices for the problem
