@@ -290,7 +290,6 @@ class GameView(arcade.View):
         self.game_music = arcade.load_sound("sounds/music.ogg")
         self.laser_blast_sound = arcade.load_sound("sounds/laserFire.ogg")
         self.user_input = '' # The user's current input
-        self.fired_answers = [] # The answers the user has fired
         self.equations = []
         self.lasers = []
         self.shields = []
@@ -374,15 +373,21 @@ class GameView(arcade.View):
         
         self.ship.draw()
 
+        # Draw the user's current input in front of the ship
         arcade.draw_text(self.user_input, SCREEN_WIDTH / 2 - 40, 100, arcade.color.WHITE, 12, 80, 'center', bold = True)
         
         for enemy in self.enemies:
             enemy.draw()
+            
+            # Get the enemy's problem and draw it as text
             problem = enemy.problem
             arcade.draw_text(problem.problem, problem.x_coord, problem.y_coord, problem.color, problem.size, problem.width, bold = True)
+            
+            # Get all of the answer choices for the problem and draw them as text if the level is less than 10
             answers = enemy.problem.all_answers
-            for answer in answers:
-                arcade.draw_text(answer.answer, answer.x_coord, answer.y_coord, answer.text_color, answer.text_size, answer.text_width, bold = True)
+            if len(answers[0].answer) < 3:
+                for answer in answers:
+                    arcade.draw_text(answer.answer, answer.x_coord, answer.y_coord, answer.text_color, answer.text_size, answer.text_width, bold = True)
 
         for laser in self.lasers:
             laser.draw()         
@@ -453,14 +458,14 @@ class GameView(arcade.View):
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
         # Fire!
         #uses the ship angle and location to create laser shot and set starting point and angle of laser blast
-        laserBlast = Laser(self.ship.angle, self.ship.center.x, self.ship.center.y)
+        # Also attaches the user's input to the laser
+        laserBlast = Laser(self.ship.angle, self.ship.center.x, self.ship.center.y, self.user_input)
         # calls the laser fire function
         laserBlast.fire()
         arcade.play_sound(self.laser_blast_sound)
         #appends the laser blast and sound to the laser array to be drawn
         self.lasers.append(laserBlast)
-        # Append the user answer to the answer list and clear input
-        self.fired_answers.append(self.user_input)
+        # Clear input
         self.user_input = ''
     
     def on_key_press(self, symbol: int, modifiers: int):
@@ -540,46 +545,29 @@ class GameView(arcade.View):
                         arcade.play_sound(self.hitsound)
                         #skips the rest
                         break
-                # Create targeted_enemy variable
-                targeted_enemy = False
                 
-                # Check if user entered an answer
-                if self.fired_answers != []:
-                    answer = self.fired_answers[0]
-                else:
-                    answer = None
-
-                
-                # Check if the user's answer is the correct answer
-                if answer == enemy.problem.c_answer:
+                # Check if the user's answer is the correct answer (this will check the answer for every enemy every time the check_collisions
+                # function is called, even if the laser has not hit an enemy yet)
+                if laser.answer == enemy.problem.c_answer:
                     is_correct = True
                     difficulty.correctAnswers += 1
                 else:
                     is_correct = False
                     difficulty.incorrectAnswers += 1
                 
-                if enemy.hitrange[0] < laser.center.x < enemy.hitrange[1] and enemy.hitrange[2] < laser.center.y < enemy.hitrange[3] and is_correct==True: #and answer == ship answer
+                # If the laser has hit the ship and the answer is correct...
+                if enemy.hitrange[0] < laser.center.x < enemy.hitrange[1] and enemy.hitrange[2] < laser.center.y < enemy.hitrange[3] and is_correct==True:
                     laser.alive = False
                     arcade.play_sound(self.hitsound)
                     enemy.hit = True
-                    targeted_enemy = True
                     
-                if enemy.hitrange[0] < laser.center.x < enemy.hitrange[1] and enemy.hitrange[2] < laser.center.y < enemy.hitrange[3] and is_correct==False: #and answer != ship answer
+                # If the laser has hit the ship and the answer is incorrect...
+                if enemy.hitrange[0] < laser.center.x < enemy.hitrange[1] and enemy.hitrange[2] < laser.center.y < enemy.hitrange[3] and is_correct==False:
                     laser.alive = False
                     arcade.play_sound(self.hitsound)
-                    targeted_enemy = True
                     #creates a shield the same way a laser or enemy is generated. The variables assign the sheild it's starting position.
                     enemyshield = Shield(enemy.hitrange[4],enemy.hitrange[5])
                     self.shields.append(enemyshield)
-                
-                # Check if this is the final enemy on the last frame before the laser is removed
-                end_of_screen = laser.center.x + 10 > SCREEN_WIDTH or laser.center.x - 10 < 0 or laser.center.y + 10 > SCREEN_HEIGHT or laser.center.y - 10 < 0
-                last_enemy = enemy == self.enemies[-1]
-
-                # Remove the answer (if there is one) if this is the targeted enemy or the last enemy of the final frame
-                if self.fired_answers != [] and (targeted_enemy or (last_enemy and end_of_screen)):
-                    self.fired_answers.pop(0)
-                    
     
     def check_game_over(self):
         if (self.game_finished):

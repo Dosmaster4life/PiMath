@@ -10,13 +10,14 @@ SCREEN_HEIGHT = 600
 
 """Laser Class for starting asteroids"""
 class Laser(Floating):
-    def __init__(self, ship_angle, ship_x, ship_y):
+    def __init__(self, ship_angle, ship_x, ship_y, answer):
         super().__init__("images/laserBlue.png")
         self.radius = BULLET_RADIUS
         self.angle = ship_angle + 90
         self.center.x = ship_x
         self.center.y = ship_y
         self.speed = BULLET_SPEED
+        self.answer = answer # The answer the user typed before they fired the laser
     
     """fire the laser -- pew pew"""
     def fire(self):
