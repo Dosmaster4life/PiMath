@@ -1,7 +1,6 @@
 # pip install --upgrade firebase-admin
 # pip3 install firebase-admin
 # Documentation to use firestore https://firebase.google.com/docs/firestore/manage-data/add-data
-from pickle import TRUE
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -104,7 +103,7 @@ class DatabaseService:
     def getScoreBoard(self):
         db = firestore.client()
         highScores ={}
-        localdoc_ref = db.collection(u'Users').order_by("highestLevel").limit(5).stream() #highest 5 scores
+        localdoc_ref = db.collection(u'Users').order_by(u"highestLevel",direction=firestore.Query.DESCENDING).limit(5).stream() #highest 5 scores
         for doc in localdoc_ref:
             data = doc.to_dict()
             highScores[doc.id] =  data["name"],":", data["highScore"]
@@ -118,8 +117,5 @@ class DatabaseService:
         
         
         
-database = DatabaseService() # Create user in database if local_data doesn't exist
-database.updateHighestLevel(5)
-database.updateHighScore(500)
-database.getScoreBoard()
+
 

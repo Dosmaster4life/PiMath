@@ -17,7 +17,7 @@ class ProblemAnswer():
         '''Checks whether the answer choice given is correct or incorrect.'''
         if correct_incorrect == 'C':
             self.correct = True
-            self.hit_count +=1
+           # self.hit_count +=1
         else:
             self.correct = False
         

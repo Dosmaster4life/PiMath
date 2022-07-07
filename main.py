@@ -1,4 +1,5 @@
 from asyncio import shield
+from urllib.request import DataHandler
 import arcade
 import math
 from laser import Laser
@@ -22,6 +23,8 @@ SHIP_TURN_AMOUNT = 3
 SHIP_RADIUS = 30
 
 SCORE_HIT = 5
+
+database = DatabaseService()
 
 difficulty = Difficulty()
 
@@ -242,7 +245,8 @@ class HighScore(arcade.View):
     def __init__(self):
         super().__init__()
         self.background = arcade.load_texture("images/SpaceWallpaper1920x672.png")
-        self.score_list = DatabaseService.getScoreBoard(5)
+        self.score_list = database.getScoreBoard()
+        print(self.score_list)
         
         
             
