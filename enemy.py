@@ -3,9 +3,9 @@ from random import randint
 from floating import Floating
 from math_problem import MathProblem
 from shield import Shield
-from difficulty_manager import Difficulty
+#from difficulty_manager import Difficulty
 
-difficulty = Difficulty()
+#difficulty = Difficulty()
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -14,11 +14,11 @@ SHIP_RADIUS = 30
 
 class Enemies(Floating):
     
-    def __init__(self):
+    def __init__(self, difficulty):
         super().__init__("images/ship.png")
         self.radius = SHIP_RADIUS
-        self.center.x = randint(10,SCREEN_WIDTH - 10)
-        self.center.y =  550
+        self.center.x = randint(50, SCREEN_WIDTH - 50)
+        self.center.y =  randint(550, 950)
         self.lives = 1    
         self.time = 0
         self.hit = False

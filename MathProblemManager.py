@@ -7,8 +7,8 @@ class MathProblemManger:
     def __init__(self):
 
         self.level = 0
-        self.correctAnswers = 0
-        self.incorrectAnswers = 0
+        #self.correctAnswers = 0
+        #self.incorrectAnswers = 0
         self.convertOperator = {"+": operator.add, "-": operator.sub, "*": operator.mul, "/": operator.floordiv}
 
     def chooseOperator(self):  # More levels will be added in the future up to level 50
@@ -28,7 +28,9 @@ class MathProblemManger:
             return "*"
     
             
-
+    def set_level(self, level):
+        self.level = level
+        return self.level
 
     def __levelZero(self):
         n1 = random.randint(3, 25)
@@ -529,19 +531,19 @@ class MathProblemManger:
         return problems     
              
 
-    def difficultyChecker(self):
-        if self.correctAnswers > 20:  # If a user gets 20 correct missing less than 3 then level up
-            self.level += 1
-            self.correctAnswers = 0
-            self.incorrectAnswers = 0
+    # def difficultyChecker(self):
+    #     if self.correctAnswers > 20:  # If a user gets 20 correct missing less than 3 then level up
+    #         self.level += 1
+    #         self.correctAnswers = 0
+    #         self.incorrectAnswers = 0
            
-        elif self.incorrectAnswers < -2:  # Go down a level
-            if self.level > 1:
-                self.level -= 1
-                self.incorrectAnswers = 0
+    #     elif self.incorrectAnswers < -2:  # Go down a level
+    #         if self.level > 1:
+    #             self.level -= 1
+    #             self.incorrectAnswers = 0
 
     def generateProblem(self):
-        self.difficultyChecker()
+        #self.difficultyChecker()
 
         if self.level == 0:
             return self.__levelZero()
@@ -609,74 +611,74 @@ class MathProblemManger:
             return self.__levelInfinite()
 
 
-m = MathProblemManger()
-print(m.level)
-print(m.generateProblem())
-m.level = 1
-print(m.generateProblem())
-m.level = 2
-print(m.generateProblem())
-m.level = 3
-print(m.generateProblem())
-m.level = 4
-print(m.generateProblem())
-m.level = 5
-print(m.generateProblem())
-m.level = 6
-print(m.generateProblem())
-m.level = 7
-print(m.generateProblem())
-m.level = 8
-print(m.generateProblem())
-m.level = 9
-print(m.generateProblem())
-m.level = 10
-print(m.generateProblem())
-m.level = 11
-print(m.generateProblem())
-m.level = 12
-print(m.generateProblem())
-m.level = 13
-print(m.generateProblem())
-m.level = 14
-print(m.generateProblem())
-m.level = 15
-print(m.generateProblem())
-m.level = 16
-print(m.generateProblem())
-m.level = 17
-print(m.generateProblem())
-m.level = 18
-print(m.generateProblem())
-m.level = 19
-print(m.generateProblem())
-m.level = 20
-print(m.generateProblem())
-m.level = 21
-print(m.generateProblem())
-m.level = 22
-print(m.generateProblem())
-m.level = 23
-print(m.generateProblem())
-m.level = 24
-print(m.generateProblem())
-m.level = 25
-print(m.generateProblem())
-m.level = 26
-print(m.generateProblem())
-m.level = 27
-print(m.generateProblem())
-m.level = 28
-print(m.generateProblem())
-m.level = 29
-print(m.generateProblem())
-m.level = 30
-print(m.generateProblem())
-m.level = 50
-print(m.generateProblem())
-m.level = 75
-print(m.generateProblem())
-m.level = 100
-print(m.generateProblem())
-m.level = 1000
-print(m.generateProblem())
+# m = MathProblemManger()
+# print(m.level)
+# print(m.generateProblem())
+# m.level = 1
+# print(m.generateProblem())
+# m.level = 2
+# print(m.generateProblem())
+# m.level = 3
+# print(m.generateProblem())
+# m.level = 4
+# print(m.generateProblem())
+# m.level = 5
+# print(m.generateProblem())
+# m.level = 6
+# print(m.generateProblem())
+# m.level = 7
+# print(m.generateProblem())
+# m.level = 8
+# print(m.generateProblem())
+# m.level = 9
+# print(m.generateProblem())
+# m.level = 10
+# print(m.generateProblem())
+# m.level = 11
+# print(m.generateProblem())
+# m.level = 12
+# print(m.generateProblem())
+# m.level = 13
+# print(m.generateProblem())
+# m.level = 14
+# print(m.generateProblem())
+# m.level = 15
+# print(m.generateProblem())
+# m.level = 16
+# print(m.generateProblem())
+# m.level = 17
+# print(m.generateProblem())
+# m.level = 18
+# print(m.generateProblem())
+# m.level = 19
+# print(m.generateProblem())
+# m.level = 20
+# print(m.generateProblem())
+# m.level = 21
+# print(m.generateProblem())
+# m.level = 22
+# print(m.generateProblem())
+# m.level = 23
+# print(m.generateProblem())
+# m.level = 24
+# print(m.generateProblem())
+# m.level = 25
+# print(m.generateProblem())
+# m.level = 26
+# print(m.generateProblem())
+# m.level = 27
+# print(m.generateProblem())
+# m.level = 28
+# print(m.generateProblem())
+# m.level = 29
+# print(m.generateProblem())
+# m.level = 30
+# print(m.generateProblem())
+# m.level = 50
+# print(m.generateProblem())
+# m.level = 75
+# print(m.generateProblem())
+# m.level = 100
+# print(m.generateProblem())
+# m.level = 1000
+# print(m.generateProblem())

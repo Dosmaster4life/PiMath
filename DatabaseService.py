@@ -70,8 +70,9 @@ class DatabaseService:
             self.createInitialRecord()
 
     def updateHighScore(self,score):
-        self.highScore = score
-        firestore.client().collection(u"Users").document(self.documentName).update({"highScore" : score})
+        if score > self.highScore:
+            self.highScore = score
+            firestore.client().collection(u"Users").document(self.documentName).update({"highScore" : score})
 
     def updateHighestLevel(self, level):
         self.highestLevel = level

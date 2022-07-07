@@ -9,9 +9,10 @@ from enemy import Enemies
 from random import randint
 from stars import StarFall
 from difficulty_manager import Difficulty
+from MathProblemManager import MathProblemManger
 from DatabaseService import DatabaseService
-import arcade.gui as gui
 import random
+
 
 # These are Global constants to use throughout the game
 SCREEN_WIDTH = 800
@@ -28,6 +29,8 @@ database = DatabaseService()
 
 difficulty = Difficulty()
 
+mathproblems = MathProblemManger()
+
 class NameView(arcade.View):
     def __init__(self):
         super().__init__()
@@ -43,25 +46,139 @@ class NameView(arcade.View):
         arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
         arcade.draw_lrwh_rectangle_textured(SCREEN_WIDTH / 2 - 75 , SCREEN_HEIGHT - 150, 150, 120, self.logo,0,255)
         arcade.draw_text('Please Enter Your Name', self.mid_w, SCREEN_HEIGHT - 225, arcade.color.WHITE_SMOKE, font_size=50, font_name="Kenney Pixel", anchor_x="center")
-        arcade.draw_lrtb_rectangle_outline(self.mid_w - 300, self.mid_w + 300 , SCREEN_HEIGHT - 235,SCREEN_HEIGHT - 295, arcade.color.WHITE_SMOKE)
-        arcade.draw_text('Submit', self.mid_w, SCREEN_HEIGHT - 375, arcade.color.WHITE_SMOKE, font_size=40, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_lrtb_rectangle_outline(self.mid_w - 300, self.mid_w + 300 , SCREEN_HEIGHT - 270,SCREEN_HEIGHT - 330, arcade.color.WHITE_SMOKE)
+        arcade.draw_text(self.name, self.mid_w, SCREEN_HEIGHT - 295, arcade.color.WHITE_SMOKE, font_size=50, font_name="Kenney Pixel", anchor_x="center", anchor_y="center")
+        arcade.draw_text('Submit', self.mid_w, SCREEN_HEIGHT - 385, arcade.color.WHITE_SMOKE, font_size=40, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text('Skip/Main Menu', self.mid_w, SCREEN_HEIGHT - 450, arcade.color.WHITE_SMOKE, font_size=40, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text('Current user name is: ' + str(database.name), self.mid_w, SCREEN_HEIGHT - 520, arcade.color.WHITE_SMOKE, font_size=40, font_name="Kenney Pixel", anchor_x="center")
+
 
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
-        if (y < 275 and y > 225 and x < 500 and x > 100):
+        if (y < 225 and x < 500 and x > 100):
+            self.state = "menu"
+        elif (y < 275 and y > 225 and x < 500 and x > 100):
             self.selectiony1 = 275
             self.selectiony2 = 245
             self.state = "submit"
-        elif (y < 365 and y > 305 and (x < 500 and x > 100)):
-            self.selectiony1 = 325
-            self.selectiony2 = 295
-            self.state = "name"
         else:
             self.state = ""
-       
+
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.KEY_0:
+            self.name += '0'
+        
+        elif key == arcade.key.KEY_1:
+            self.name += '1'
+        
+        elif key == arcade.key.KEY_2:
+            self.name += '2'
+        
+        elif key == arcade.key.KEY_3:
+            self.name += '3'
+        
+        elif key == arcade.key.KEY_4:
+            self.name += '4'
+        
+        elif key == arcade.key.KEY_5:
+            self.name += '5'
+        
+        elif key == arcade.key.KEY_6:
+            self.name += '6'
+        
+        elif key == arcade.key.KEY_7:
+            self.name += '7'
+        
+        elif key == arcade.key.KEY_8:
+            self.name += '8'
+        
+        elif key == arcade.key.KEY_9:
+            self.name += '9'
+
+        elif key == arcade.key.A:
+            self.name += 'a'
+
+        elif key == arcade.key.B:
+            self.name += 'b'
+
+        elif key == arcade.key.C:
+            self.name += 'c'
+
+        elif key == arcade.key.D:
+            self.name += 'd'
+
+        elif key == arcade.key.E:
+            self.name += 'e'
+
+        elif key == arcade.key.F:
+            self.name += 'f'
+
+        elif key == arcade.key.G:
+            self.name += 'g'
+
+        elif key == arcade.key.H:
+            self.name += 'h'
+
+        elif key == arcade.key.I:
+            self.name += 'i'
+
+        elif key == arcade.key.J:
+            self.name += 'j'
+
+        elif key == arcade.key.K:
+            self.name += 'k'
+
+        elif key == arcade.key.L:
+            self.name += 'l'
+
+        elif key == arcade.key.M:
+            self.name += 'm'
+
+        elif key == arcade.key.N:
+            self.name += 'n'
+
+        elif key == arcade.key.O:
+            self.name += 'o'
+
+        elif key == arcade.key.P:
+            self.name += 'p'
+
+        elif key == arcade.key.Q:
+            self.name += 'q'
+
+        elif key == arcade.key.R:
+            self.name += 'r'
+
+        elif key == arcade.key.S:
+            self.name += 's'
+
+        elif key == arcade.key.T:
+            self.name += 't'
+
+        elif key == arcade.key.U:
+            self.name += 'u'
+
+        elif key == arcade.key.V:
+            self.name += 'v'
+
+        elif key == arcade.key.W:
+            self.name += 'w'
+
+        elif key == arcade.key.X:
+            self.name += 'x'
+
+        elif key == arcade.key.Y:
+            self.name += 'y'
+
+        elif key == arcade.key.Z:
+            self.name += 'z'
+
+
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
-        if (self.state == "submit"):
+        if self.state == "submit":
+            database.updateName(self.name.capitalize())
+        elif self.state == "menu":
             menu_view = MenuView()
             self.window.show_view(menu_view)
         
@@ -253,22 +370,22 @@ class HighScore(arcade.View):
     def on_draw(self):
         self.clear()
         arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
+        
         arcade.draw_text("Hero Hall of Fame", SCREEN_WIDTH / 2, 520, arcade.color.WHITE_SMOKE, font_size=80, font_name="Kenney Pixel", anchor_x="center")
 
-        arcade.draw_text("Hero Hall of Fame", SCREEN_WIDTH / 2, 520, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
-        arcade.draw_text("Hero Hall of Fame", SCREEN_WIDTH / 2, 520, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
-        arcade.draw_text("Hero Hall of Fame", SCREEN_WIDTH / 2, 520, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
-        arcade.draw_text("Hero Hall of Fame", SCREEN_WIDTH / 2, 520, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
-        arcade.draw_text("", SCREEN_WIDTH / 2, 520, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
+        text_height = 390
+        for i in self.score_list.values():
+            newval1, newval2, newval3 = i
+            arcade.draw_text(str(newval1) +  " " + str(newval3), SCREEN_WIDTH / 2, text_height, arcade.color.WHITE_SMOKE, font_size=50, font_name="Kenney Pixel", anchor_x="center")
+            text_height -= 70
 
         arcade.draw_text("click anywhere to return to main menu", SCREEN_WIDTH / 2, 20, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
         
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
-        # menu_view = MenuView()
-        # self.window.show_view(menu_view)
-        for x in self.score_list:
-            print(x[0:1])
+        menu_view = MenuView()
+        self.window.show_view(menu_view)
+
      
      
 class GameView(arcade.View):
@@ -288,6 +405,9 @@ class GameView(arcade.View):
         super().__init__()
         
         self.level = level
+        difficulty.set_level(self.level)
+        mathproblems.set_level(self.level)
+        self.enemy_count = difficulty.getEnemyCount()
         self.star_speed = 1.45
         self.starfall_list = []
         self.start_starfall()
@@ -298,9 +418,10 @@ class GameView(arcade.View):
         self.lasers = []
         self.shields = []
         self.ship = Ship()
-        self.enemies = [Enemies()]
+        self.enemies = [Enemies(difficulty)]
         self.begin_equations = 0
         self.score = 0
+        self.score_value = 10
         self.alpha1_life = 255
         self.alpha2_life = 255
         self.alpha3_life = 255
@@ -308,6 +429,7 @@ class GameView(arcade.View):
         self.hitsound = arcade.load_sound("sounds/explode1.ogg")
         self.background = arcade.color.BLACK
         arcade.set_background_color(self.background)
+        
         #self.star_angle = randint(1, 180)
         # to implement equations/answers into an array
         
@@ -400,22 +522,46 @@ class GameView(arcade.View):
             shield.draw() 
         
         self.draw_lives()
-            
+
+        #DRAW THE SCORE
+        arcade.draw_text("Score: " + str(self.score), SCREEN_WIDTH - 100, 580, arcade.color.WHITE_SMOKE, font_size=25, font_name="Kenney Pixel", anchor_x="center")
+
+        #DRAW THE LEVEL
+        arcade.draw_text("Level: " + str(difficulty.level), 80, 580, arcade.color.WHITE_SMOKE, font_size=25, font_name="Kenney Pixel", anchor_x="center")
+
+        #DRAW THE PILOT NAME
+        arcade.draw_text("Pilot: " + str(database.name), SCREEN_WIDTH - 100, 20, arcade.color.WHITE_SMOKE, font_size=25, font_name="Kenney Pixel", anchor_x="center")
+  
     def update(self, delta_time):
         """
         Update each object in the game.
         :param delta_time: tells us how much time has actually elapsed
         """
         
-        if len(self.enemies) < difficulty.getEnemyCount():
-            if randint(1, 600) == 1:
-                enemy = Enemies()
+        if len(self.enemies) == 0:
+            self.level =+ 1
+            difficulty.set_level(self.level)
+            mathproblems.set_level(self.level)
+            self.enemy_count = difficulty.getEnemyCount()
+            for i in range( 0,self.enemy_count):
+                enemy = Enemies(difficulty)
                 self.enemies.append(enemy)
-                if difficulty.level > self.level:
-                    self.level = difficulty.level
+
+        #     if randint(1, 600) == 1:
+        #         enemy = Enemies(difficulty)
+        #         self.enemies.append(enemy)
+                
+
+        # if delta_time % 30 == 0:
+        #     self.level =+ 1
+        #     difficulty.set_level(self.level)
+        #     mathproblems.set_level(self.level)
 
 
+     
 
+
+            
 
         # Tell everything to advance or move forward one step in time
             
@@ -454,6 +600,8 @@ class GameView(arcade.View):
         
         # Check to see if the game is over
         self.check_game_over()
+
+
         
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         # set the ship angle in degrees, subtract the ship x and y from mouse x and y pass to angle function and then add 90 degrees
@@ -564,6 +712,7 @@ class GameView(arcade.View):
                     laser.alive = False
                     arcade.play_sound(self.hitsound)
                     enemy.hit = True
+                    self.score += self.score_value
                     
                 # If the laser has hit the ship and the answer is incorrect...
                 if enemy.hitrange[0] < laser.center.x < enemy.hitrange[1] and enemy.hitrange[2] < laser.center.y < enemy.hitrange[3] and is_correct==False:
@@ -574,9 +723,27 @@ class GameView(arcade.View):
                     self.shields.append(enemyshield)
     
     def check_game_over(self):
-        if (self.game_finished):
+        #self.ship = Ship()
+        #self.enemies = [Enemies()]
+        for enemy in self.enemies:
+            if enemy.center.y <= 1:
+                self.ship.wrecked()
+                if self.ship.lives == 2:
+                    self.alpha3_life = 0
+                elif self.ship.lives == 1:
+                    self.alpha3_life = 0
+                    self.alpha2_life = 0
+                elif self.ship.lives == 0:
+                    self.alpha3_life = 0
+                    self.alpha2_life = 0    
+                    self.alpha1_life = 0
+        if (self.ship.alive == False):
             game_over= GameOver(self.score)
             self.window.show_view(game_over)
+            database.updateHighScore(self.score)
+            database.checkLevelUpdate(difficulty.level)
+        
+
 
 
 
@@ -602,22 +769,20 @@ class GameView(arcade.View):
         Checks to see what level the game is on 
         and changes background variables and starfall speed.
         """
-
-        if self.level > 2:
+        level_check = difficulty.get_level()
+        if level_check > 2:
             self.background = arcade.color.BLUE_VIOLET
             self.star_speed = 2
-        elif self.level > 4:
+        elif level_check > 4:
             self.background = arcade.color.SAE
             self.star_speed = 3
-        elif self.level > 7:
+        elif level_check > 7:
             self.background = arcade.color.BOYSENBERRY
             self.star_speed = 4
-        elif self.level > 10:
+        elif level_check > 10:
             self.background = arcade.color.BYZANTIUM
             self.star_speed = 5
-        else:
-            self.background = arcade.color.BLACK
-            self.star_speed = 1.45
+        
         arcade.set_background_color(self.background)
 
     def cleanup_space_particles(self):
