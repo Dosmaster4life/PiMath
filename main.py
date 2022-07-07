@@ -464,7 +464,7 @@ class GameView(arcade.View):
         self.user_input = ''
     
     def on_key_press(self, symbol: int, modifiers: int):
-        # Check what number was pressed
+        # Check what key was pressed
         if symbol == arcade.key.KEY_0:
             self.user_input += '0'
         
@@ -494,6 +494,9 @@ class GameView(arcade.View):
         
         elif symbol == arcade.key.KEY_9:
             self.user_input += '9'
+        
+        elif symbol == arcade.key.BACKSPACE:
+            self.user_input = self.user_input[:-1]
 
     def _get_angle_degrees(self, x, y):
         """
