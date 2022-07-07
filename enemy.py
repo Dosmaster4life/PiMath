@@ -18,7 +18,7 @@ class Enemies(Floating):
         super().__init__("images/ship.png")
         self.radius = SHIP_RADIUS
         self.center.x = randint(50, SCREEN_WIDTH - 50)
-        self.center.y =  randint(550, 950)
+        self.center.y = randint(550, SCREEN_HEIGHT + 250)
         self.lives = 1    
         self.time = 0
         self.hit = False

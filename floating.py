@@ -40,20 +40,9 @@ class Floating(ABC):
     
     """ advance the object and wrap across the screen"""
     def advance(self):
-        if self.center.x > SCREEN_WIDTH:
-            self.center.x = 0
-            self.center.x += self.velocity.dx
-            self.center.y += self.velocity.dy
-        elif self.center.x < 0:
-            self.center.x = SCREEN_WIDTH
-            self.center.x += self.velocity.dx
-            self.center.y += self.velocity.dy
-        elif self.center.y > SCREEN_HEIGHT:
-            self.center.y = 0
-            self.center.x += self.velocity.dx
-            self.center.y += self.velocity.dy
-        elif self.center.y < 0:
-            self.center.y = SCREEN_HEIGHT
+        
+        if self.center.y < 0:
+            self.center.y = SCREEN_HEIGHT + 50
             self.center.x += self.velocity.dx
             self.center.y += self.velocity.dy
         else:

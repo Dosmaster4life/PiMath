@@ -407,7 +407,7 @@ class GameView(arcade.View):
         self.level = level
         difficulty.set_level(self.level)
         mathproblems.set_level(self.level)
-        self.enemy_count = difficulty.getEnemyCount()
+        self.enemy_count = 2
         self.star_speed = 1.45
         self.starfall_list = []
         self.start_starfall()
@@ -538,31 +538,22 @@ class GameView(arcade.View):
         :param delta_time: tells us how much time has actually elapsed
         """
         
+
+        
         if len(self.enemies) == 0:
-            self.level =+ 1
+            self.level += 1
             difficulty.set_level(self.level)
             mathproblems.set_level(self.level)
             self.enemy_count = difficulty.getEnemyCount()
-            for i in range( 0,self.enemy_count):
+            for i in range(0, self.enemy_count):
+                mathproblems.set_level(self.level)
                 enemy = Enemies(difficulty)
+            
+                    
                 self.enemies.append(enemy)
 
-        #     if randint(1, 600) == 1:
-        #         enemy = Enemies(difficulty)
-        #         self.enemies.append(enemy)
-                
 
-        # if delta_time % 30 == 0:
-        #     self.level =+ 1
-        #     difficulty.set_level(self.level)
-        #     mathproblems.set_level(self.level)
-
-
-     
-
-
-            
-
+           
         # Tell everything to advance or move forward one step in time
             
         for laser in self.lasers:
@@ -702,10 +693,11 @@ class GameView(arcade.View):
                 # function is called, even if the laser has not hit an enemy yet)
                 if laser.answer == enemy.problem.c_answer:
                     is_correct = True
-                    difficulty.correctAnswers += 1
+                    #difficulty.correctAnswers += 1
+                    difficulty.remove_enemy()
                 else:
                     is_correct = False
-                    difficulty.incorrectAnswers += 1
+                    #difficulty.incorrectAnswers += 1
                 
                 # If the laser has hit the ship and the answer is correct...
                 if enemy.hitrange[0] < laser.center.x < enemy.hitrange[1] and enemy.hitrange[2] < laser.center.y < enemy.hitrange[3] and is_correct==True:
@@ -726,7 +718,7 @@ class GameView(arcade.View):
         #self.ship = Ship()
         #self.enemies = [Enemies()]
         for enemy in self.enemies:
-            if enemy.center.y <= 1:
+            if enemy.center.y <= 1 and enemy.hit == False:
                 self.ship.wrecked()
                 if self.ship.lives == 2:
                     self.alpha3_life = 0

@@ -70,25 +70,24 @@ class Difficulty:
         self.enemySpeed = 2
         self.enemyCount = 5
 
-    def difficultyChecker(self):
-        # if self.correctAnswers > 20 and self.level < 30:  # If a user gets 20 correct missing less than 3 then level up
-        #     self.level += 1
-        #     self.correctAnswers = 0
-        #     self.incorrectAnswers = 0
-        # elif self.incorrectAnswers < -2:  # Go down a level
-        #     if self.level > 1:
-        #         self.level -= 1
-        #         self.incorrectAnswers = 0
+    # def difficultyChecker(self):
+    #     # if self.correctAnswers > 20 and self.level < 30:  # If a user gets 20 correct missing less than 3 then level up
+    #     #     self.level += 1
+    #     #     self.correctAnswers = 0
+    #     #     self.incorrectAnswers = 0
+    #     # elif self.incorrectAnswers < -2:  # Go down a level
+    #     #     if self.level > 1:
+    #     #         self.level -= 1
+    #     #         self.incorrectAnswers = 0
 
-        if self.enemyCount == 0:
-            self.level += 1
-            return True
-        else:
-            return False
+    #     if self.enemyCount == 0:
+    #         self.level += 1
+        
+            
 
 
     def getEnemySpeed(self):
-        self.difficultyChecker()
+        # self.difficultyChecker()
 
         if self.level == 0:
             self.__levelZero()
@@ -126,7 +125,6 @@ class Difficulty:
         return self.enemySpeed
 
     def getEnemyCount(self):
-        
 
         if self.level == 0:
             self.__levelZero()
@@ -157,3 +155,6 @@ class Difficulty:
     def set_level(self, level):
         self.level = level
         return self.level
+
+    def remove_enemy(self):
+        self.enemyCount -= 1
