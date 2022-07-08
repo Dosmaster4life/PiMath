@@ -74,9 +74,9 @@ class MathProblemManger:
         problem = str(n1) + opChoice + str(n2)
         op = self.chooseOperator()
         problems = {
-            nRight: problem +  "," + str(nRight),
-            nWrong1: problem +  "," + str(nWrong1),
-            nWrong2: problem +  "," + str(nWrong2)
+            nRight: problem +  "," + str(nRight) + "," + "C",
+            nWrong1: problem +  "," + str(nWrong1)+ "," + "W",
+            nWrong2: problem +  "," + str(nWrong2)+ "," + "W",
         }
         return problems
 

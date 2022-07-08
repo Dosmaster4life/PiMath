@@ -374,9 +374,10 @@ class HighScore(arcade.View):
         arcade.draw_text("Hero Hall of Fame", SCREEN_WIDTH / 2, 520, arcade.color.WHITE_SMOKE, font_size=80, font_name="Kenney Pixel", anchor_x="center")
 
         text_height = 390
+        
         for i in self.score_list.values():
             newval1, newval2, newval3 = i
-            arcade.draw_text(str(newval1) +  " " + str(newval3), SCREEN_WIDTH / 2, text_height, arcade.color.WHITE_SMOKE, font_size=50, font_name="Kenney Pixel", anchor_x="center")
+            arcade.draw_text(str(newval3) +  " " + str(newval1), SCREEN_WIDTH / 2, text_height, arcade.color.WHITE_SMOKE, font_size=50, font_name="Kenney Pixel", anchor_x="center")
             text_height -= 70
 
         arcade.draw_text("click anywhere to return to main menu", SCREEN_WIDTH / 2, 20, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
@@ -418,7 +419,7 @@ class GameView(arcade.View):
         self.lasers = []
         self.shields = []
         self.ship = Ship()
-        self.enemies = [Enemies(difficulty)]
+        self.enemies = [Enemies(difficulty, self.level)]
         self.begin_equations = 0
         self.score = 0
         self.score_value = 10
@@ -547,7 +548,7 @@ class GameView(arcade.View):
             self.enemy_count = difficulty.getEnemyCount()
             for i in range(0, self.enemy_count):
                 mathproblems.set_level(self.level)
-                enemy = Enemies(difficulty)
+                enemy = Enemies(difficulty, self.level)
             
                     
                 self.enemies.append(enemy)

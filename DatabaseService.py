@@ -104,10 +104,10 @@ class DatabaseService:
     def getScoreBoard(self):
         db = firestore.client()
         highScores ={}
-        localdoc_ref = db.collection(u'Users').order_by(u"highestLevel",direction=firestore.Query.DESCENDING).limit(5).stream() #highest 5 scores
+        localdoc_ref = db.collection(u'Users').order_by(u"highScore",direction=firestore.Query.DESCENDING).limit(5).stream() #highest 5 scores
         for doc in localdoc_ref:
             data = doc.to_dict()
-            highScores[doc.id] =  data["name"],":", data["highScore"]
+            highScores[doc.id] =  data["highScore"],":", data["name"]
         return(highScores) # Returns a dictionary with the doc id as the key and the name:highscore as the value
     
         pass

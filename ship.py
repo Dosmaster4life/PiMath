@@ -43,7 +43,7 @@ class Ship(Floating):
         if self.hit == True:
             self.time += 1
             self.alpha = 150
-            if self.time > 80:
+            if self.time > 140:
                 self.hit = False
                 self.alpha = 255
                 self.time = 0
