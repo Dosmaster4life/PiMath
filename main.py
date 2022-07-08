@@ -419,7 +419,7 @@ class GameView(arcade.View):
         self.lasers = []
         self.shields = []
         self.ship = Ship()
-        self.enemies = [Enemies(difficulty, self.level)]
+        self.enemies = [Enemies(difficulty, self.level, 0)]
         self.begin_equations = 0
         self.score = 0
         self.score_value = 10
@@ -548,7 +548,7 @@ class GameView(arcade.View):
             self.enemy_count = difficulty.getEnemyCount()
             for i in range(0, self.enemy_count):
                 mathproblems.set_level(self.level)
-                enemy = Enemies(difficulty, self.level)
+                enemy = Enemies(difficulty, self.level, i)
             
                     
                 self.enemies.append(enemy)
@@ -767,16 +767,16 @@ class GameView(arcade.View):
         """
         level_check = difficulty.get_level()
         if level_check > 2:
-            self.background = arcade.color.BLUE_VIOLET
+            self.background = arcade.color.BISTRE
             self.star_speed = 2
         elif level_check > 4:
-            self.background = arcade.color.SAE
+            self.background = arcade.color.CATALINA_BLUE
             self.star_speed = 3
         elif level_check > 7:
-            self.background = arcade.color.BOYSENBERRY
+            self.background = arcade.color.BRONZE
             self.star_speed = 4
         elif level_check > 10:
-            self.background = arcade.color.BYZANTIUM
+            self.background = arcade.color.CADET
             self.star_speed = 5
         
         arcade.set_background_color(self.background)

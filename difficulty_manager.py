@@ -32,43 +32,43 @@ class Difficulty:
 
     def __levelSix(self):
         self.enemySpeed = .5
-        self.enemyCount = 4
+        self.enemyCount = 3
 
     def __levelSeven(self):
         self.enemySpeed = .75
-        self.enemyCount = 4
+        self.enemyCount = 3
 
     def __levelEight(self):
         self.enemySpeed = 1
-        self.enemyCount = 4
+        self.enemyCount = 3
 
     def __levelNine(self):
         self.enemySpeed = .5
-        self.enemyCount = 5
+        self.enemyCount = 3
 
     def __levelTen(self):
         self.enemySpeed = .75
-        self.enemyCount = 5
+        self.enemyCount = 3
 
     def __levelEleven(self):
         self.enemySpeed = 1
-        self.enemyCount = 5
+        self.enemyCount = 3
 
     def __levelTwelve(self):
         self.enemySpeed = 1.25
-        self.enemyCount = 5
+        self.enemyCount = 3
 
     def __levelThirteen(self):
         self.enemySpeed = 1.5
-        self.enemyCount = 5
+        self.enemyCount = 3
 
     def __levelFourteen(self):
         self.enemySpeed = 1.75
-        self.enemyCount = 5
+        self.enemyCount = 3
 
     def __levelFifteen(self):
         self.enemySpeed = 2
-        self.enemyCount = 5
+        self.enemyCount = 3
 
     # def difficultyChecker(self):
     #     # if self.correctAnswers > 20 and self.level < 30:  # If a user gets 20 correct missing less than 3 then level up

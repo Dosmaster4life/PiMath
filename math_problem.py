@@ -43,7 +43,7 @@ class MathProblem():
             if data[2] == 'C':
                 self.problem = data[0]
                 self.c_answer = data[1]
-                print(data[1], data[2], enemy_center_y)
+                
             
             # Append the answer object to the answer list
             problem_answers.append(ProblemAnswer(data[1], data[2], enemy_center_y))
