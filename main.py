@@ -32,6 +32,9 @@ difficulty = Difficulty()
 mathproblems = MathProblemManger()
 
 class NameView(arcade.View):
+    """
+    Initial View used to set the players name
+    """
     def __init__(self):
         super().__init__()
         self.state = ""
@@ -41,6 +44,7 @@ class NameView(arcade.View):
         self.background = arcade.load_texture("images/SpaceWallpaper1920x672.png")
         self.name = ""
 
+    # Draw all elements of Name View screen
     def on_draw(self):
         self.clear()
         arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
@@ -49,11 +53,11 @@ class NameView(arcade.View):
         arcade.draw_lrtb_rectangle_outline(self.mid_w - 300, self.mid_w + 300 , SCREEN_HEIGHT - 270,SCREEN_HEIGHT - 330, arcade.color.WHITE_SMOKE)
         arcade.draw_text(self.name, self.mid_w, SCREEN_HEIGHT - 295, arcade.color.WHITE_SMOKE, font_size=50, font_name="Kenney Pixel", anchor_x="center", anchor_y="center")
         arcade.draw_text('Submit', self.mid_w, SCREEN_HEIGHT - 385, arcade.color.WHITE_SMOKE, font_size=40, font_name="Kenney Pixel", anchor_x="center")
-        arcade.draw_text('Skip/Main Menu', self.mid_w, SCREEN_HEIGHT - 450, arcade.color.WHITE_SMOKE, font_size=40, font_name="Kenney Pixel", anchor_x="center")
+        arcade.draw_text('Go to Main Menu', self.mid_w, SCREEN_HEIGHT - 450, arcade.color.WHITE_SMOKE, font_size=40, font_name="Kenney Pixel", anchor_x="center")
         arcade.draw_text('Current user name is: ' + str(database.name), self.mid_w, SCREEN_HEIGHT - 520, arcade.color.WHITE_SMOKE, font_size=40, font_name="Kenney Pixel", anchor_x="center")
 
 
-
+    # Determine if mouse is over submit buutton or if it is over skip to main menu
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         if (y < 225 and x < 500 and x > 100):
             self.state = "menu"
@@ -64,6 +68,7 @@ class NameView(arcade.View):
         else:
             self.state = ""
 
+    # Get Key strokes and append them to each other to form the name
     def on_key_press(self, key, modifiers):
         if key == arcade.key.KEY_0:
             self.name += '0'
@@ -174,7 +179,7 @@ class NameView(arcade.View):
             self.name += 'z'
 
 
-
+    # connect to the database and update the name or go to the main menu
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         if self.state == "submit":
             database.updateName(self.name.capitalize())
@@ -186,6 +191,9 @@ class NameView(arcade.View):
 
 
 class MenuView(arcade.View):
+    """
+    Draws all information of the main menu and allows for navigation based on mouse location and click.
+    """
     def __init__(self):
         super().__init__()
         # arcade.load_font("PressStart2P-Regular.ttf")
@@ -198,6 +206,7 @@ class MenuView(arcade.View):
         self.selectionx1, self.selectionx2, self.selectiony1, self.selectiony2 = 320, 480, 325, 295
         self.background = arcade.load_texture("images/SpaceWallpaper1920x672.png")
 
+    # Draw the main menu choices
     def on_draw(self):
         self.clear()
         arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
@@ -210,6 +219,7 @@ class MenuView(arcade.View):
         arcade.draw_text("Quit Game", self.mid_w, self.instrictiony - 150, arcade.color.WHITE_SMOKE, font_size=20, anchor_x="center")
         arcade.draw_lrtb_rectangle_filled(self.selectionx1, self.selectionx2, self.selectiony1, self.selectiony2,  color=(245, 245, 245, 45))
 
+    # based on where the mouse is located set the self.state menu
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         if (y< 135):
             self.selectiony1 = 125
@@ -232,7 +242,7 @@ class MenuView(arcade.View):
             self.selectiony2 = 295
             self.state = "play"
        
-
+    # based on self.state determine what will happen when user clicks mouse.
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         if(self.state == "quit"):
             arcade.exit()
@@ -252,6 +262,9 @@ class MenuView(arcade.View):
 
 
 class InstructionView(arcade.View):
+    """
+    Draws all information of the Instruction menu and allows user to click through instructions and then starts the game.
+    """
     def __init__(self):
         super().__init__()
         self.background = arcade.load_texture("images/spacestation2.png")
@@ -264,6 +277,7 @@ class InstructionView(arcade.View):
         self.line4 = "You, the lead Space Force Pilot must save us"
         self.line5 = "NEXT"
 
+    # draw all the elements of the instructions
     def on_draw(self):
         self.clear()
         arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
@@ -275,6 +289,7 @@ class InstructionView(arcade.View):
         arcade.draw_text(self.line4, SCREEN_WIDTH -30, SCREEN_HEIGHT / 2 - 110, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="right")
         arcade.draw_text(self.line5, SCREEN_WIDTH -30, SCREEN_HEIGHT / 2 - 190, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="right")
 
+    # Change the input of the text as you click the mouse button if at the end of instructions start the game when the mouse button is selected.
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         if self.start == False:
             self.line1 = "Hack the enemy shields by typing in the answer"
@@ -289,6 +304,9 @@ class InstructionView(arcade.View):
 
 
 class LevelSelect(arcade.View):
+    """
+    Draws all information on the menu select screen and allows for navigation based on mouse location and click.
+    """
     def __init__(self):
         super().__init__()
         self.state = "menu"
@@ -297,7 +315,7 @@ class LevelSelect(arcade.View):
         self.background = arcade.load_texture("images/spacestation.png")
         self.logo = arcade.load_texture("images/spaceForceLogo.png")
 
-
+    #Draw the elements of the level Select screen
     def on_draw(self):
         self.clear()
         arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
@@ -311,7 +329,7 @@ class LevelSelect(arcade.View):
         arcade.draw_lrtb_rectangle_filled(self.selectionx1, self.selectionx2, self.selectiony1, self.selectiony2, color=(245, 245, 245, 45))
 
 
-
+    # based on mouse location detemines what level the user is selecting.
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         if (y < 175):
             self.selectiony1 = 180
@@ -330,19 +348,23 @@ class LevelSelect(arcade.View):
             self.selectiony2 = 290
             self.level = 0
 
-
+    # Selects the level and starts the game. Passes the level value into the game
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         game_view = GameView(self.level)
         #end_view = GameOver(90)
         self.window.show_view(game_view)
 
 class GameOver(arcade.View):
+    """
+    Draws all information of the game over screen including the players score and allows the user to go to the main menu when the mouse is clicked.
+    """
     def __init__(self, score):
         super().__init__()
         self.background = arcade.load_texture("images/SpaceWallpaper1920x672.png")
         self.logo = arcade.load_texture("images/spaceForceLogo.png")
         self.score = score
-
+    
+    # draw all the element sof the game over screen
     def on_draw(self):
         self.clear()
         arcade.draw_lrwh_rectangle_textured(SCREEN_WIDTH /2 - 75, SCREEN_HEIGHT - 150, 150, 120, self.logo,0,255)
@@ -353,12 +375,15 @@ class GameOver(arcade.View):
 
         arcade.draw_text("click anywhere to return to main menu", SCREEN_WIDTH / 2, 20, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
 
-
+    # if mouse is pressed return to main menu
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         menu_view = MenuView()
         self.window.show_view(menu_view)
 
 class HighScore(arcade.View):
+    """
+    Draws all information of the high score screen, It gets the high scores from the database and allows the user to return to the main menu when mouse is clicked.
+    """
     def __init__(self):
         super().__init__()
         self.background = arcade.load_texture("images/SpaceWallpaper1920x672.png")
@@ -366,7 +391,7 @@ class HighScore(arcade.View):
         print(self.score_list)
         
         
-            
+    # draws all the elements of the high score screen        
     def on_draw(self):
         self.clear()
         arcade.draw_lrwh_rectangle_textured(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT,self.background,0,90)
@@ -375,6 +400,7 @@ class HighScore(arcade.View):
 
         text_height = 390
         
+        # gets the top 5 High scores from the database and displays them.
         for i in self.score_list.values():
             newval1, newval2, newval3 = i
             arcade.draw_text(str(newval3) +  " " + str(newval1), SCREEN_WIDTH / 2, text_height, arcade.color.WHITE_SMOKE, font_size=50, font_name="Kenney Pixel", anchor_x="center")
@@ -382,7 +408,7 @@ class HighScore(arcade.View):
 
         arcade.draw_text("click anywhere to return to main menu", SCREEN_WIDTH / 2, 20, arcade.color.WHITE_SMOKE, font_size=30, font_name="Kenney Pixel", anchor_x="center")
         
-
+    # returns to the main menu if the mouse is clicked.
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         menu_view = MenuView()
         self.window.show_view(menu_view)
@@ -503,6 +529,7 @@ class GameView(arcade.View):
         # Draw the user's current input in front of the ship
         arcade.draw_text(self.user_input, SCREEN_WIDTH / 2 - 40, 100, arcade.color.WHITE, 12, 80, 'center', bold = True)
         
+        # Draw enemies
         for enemy in self.enemies:
             enemy.draw()
             
@@ -516,12 +543,15 @@ class GameView(arcade.View):
                 for answer in answers:
                     arcade.draw_text(answer.answer, answer.x_coord, answer.y_coord, answer.text_color, answer.text_size, answer.text_width, bold = True)
 
+        # Draws laser blasts
         for laser in self.lasers:
             laser.draw()         
-
+        
+        # Draws Shields
         for shield in self.shields:
             shield.draw() 
         
+        # Draws the lives in the bottom of the screen.
         self.draw_lives()
 
         #DRAW THE SCORE
@@ -540,7 +570,7 @@ class GameView(arcade.View):
         """
         
 
-        
+        # Create enemies if needed.
         if len(self.enemies) == 0:
             self.level += 1
             difficulty.set_level(self.level)
@@ -719,6 +749,11 @@ class GameView(arcade.View):
                     self.shields.append(enemyshield)
     
     def check_game_over(self):
+        """
+        checks to see if the players lives are gone 
+        updates the database
+        displays the game over screen.
+        """
         #self.ship = Ship()
         #self.enemies = [Enemies()]
         for enemy in self.enemies:
