@@ -7,7 +7,7 @@ SCREEN_HEIGHT = 600
 class StarFall:
     """
     Each instance of this class represents a single star.
-    Based on drawing filled-circles.
+    Based on drawing square-rotating-circles.
     """
 
     def __init__(self):

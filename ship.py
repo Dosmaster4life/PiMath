@@ -10,7 +10,7 @@ SCREEN_HEIGHT = 600
 SHIP_RADIUS = 30
 
 
-"""Ship Class for starting asteroids"""
+"""Ship Class"""
 class Ship(Floating):
     def __init__(self):
         super().__init__("images/starship.png")

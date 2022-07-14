@@ -8,7 +8,7 @@ BULLET_SPEED = 10
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
-"""Laser Class for starting asteroids"""
+"""Laser Class"""
 class Laser(Floating):
     def __init__(self, ship_angle, ship_x, ship_y, answer):
         super().__init__("images/laserBlue.png")
