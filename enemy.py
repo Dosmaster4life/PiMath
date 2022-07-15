@@ -30,7 +30,7 @@ class Enemies(Floating):
         self.height = 60
         self.speed = difficulty.getEnemySpeed()
         self.velocity.dy = -1
-        self.hitbox = [self.center.x-20, self.center.x+20, self.center.y-20, self.center.y+20]
+        self.hitbox = [self.center.x-20, self.center.x+20, self.center.y-20, self.center.y+20] #creates a hitzone that can be traced to the individual enemy
         self.problem = MathProblem(self.center.x, self.center.y, level)
         self.problem.set_coordinates(self.center.x - 21.1, self.center.y + 35)
         self.shield = Shield(self.center.x, self.center.y)
