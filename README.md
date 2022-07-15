@@ -11,9 +11,27 @@ Space Force Math Defense is a program developed to test your quick thinking math
 
 This program requires [Python 3.0](https://www.python.org/downloads/) or higher to run, please install python using the appropirate installation methods.
 
-On top of that please install firebase, a cloudbased data center, which will save your data for later, and your best scroes to a server; this can be done by using the following command in your terminal once you have Python installed. (You only need to do this once)
+On top of that please install firebase, a cloudbased data center, which will save your data for later, and your best scroes to a server. You will also need to install arcade, a python module used to create arcade-style games. This can be done by using the following commands in your terminal once you have Python installed. (You only need to do this once)
 
-	pip install firebase
+```
+pip install firebase
+pip install arcade
+```
+
+To start the game, open the folder containing the game files in Visual Studio Code (or another IDE), select the main.py file, and press the run button. Alternatively, type the following command in the terminal:
+
+```
+python main.py 
+```
+or
+```
+py main.py
+```
+or
+```
+python3 main.py
+```
+(Try the other two if one does not work)
 
 # Info
 
