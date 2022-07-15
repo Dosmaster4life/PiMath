@@ -1,13 +1,17 @@
-# PyMath Game (Placeholder name)
+# Space Force Math Defense
 
-PyMath Game is a program developed to test your quick thinking math skills, starting with simple addition. As you continue play through, the questions will get progressively more difficult adding in larger numbers, different operations and even more questions to answer at a time. Before we get too in depth on the program itself there are a couple of things that need to be done to run this game, read more below. 
+<p align="center">
+   <img src="/images/spaceForceLogo.png" alt="title" width="600"/>
+</p>
+
+Space Force Math Defense is a program developed to test your quick thinking math skills, starting with simple addition. As you continue play through, the questions will get progressively more difficult adding in larger numbers, different operations and even more questions to answer at a time. Before we get too in depth on the program itself there are a couple of things that need to be done to run this game, read more below. 
 
 
 ## Pre-requisites:
 
 This program requires [Python 3.0](https://www.python.org/downloads/) or higher to run, please install python using the appropirate installation methods.
 
-On top of that please install firebase, a cloudbased data center, which will save your data for later, and your best scroes to a server; this can be done by using the following command in your terminal once you have Python installed.
+On top of that please install firebase, a cloudbased data center, which will save your data for later, and your best scroes to a server; this can be done by using the following command in your terminal once you have Python installed. (You only need to do this once)
 
 	pip install firebase
 
@@ -16,7 +20,7 @@ On top of that please install firebase, a cloudbased data center, which will sav
 ## The player
 Your goal as the player is simple, don't let any enemies get past you! Defend against numerous enemies, and the only way you can stop them is to shoot the enemy ships down! This will be done by firing off projectiles that are meant to deal with the enemies that are ahead of you! Below is a picture of the player ship. Note: This is what will be firing your projectiles!
 <p align="center">
-   <img src="/images/shipOrange.png" alt="Player"/>
+   <img src="/images/starship.png" alt="Player"/>
 </p>
 
 
@@ -35,9 +39,11 @@ Please note that all shots you make are important, your enemies are smart and ha
 <p align="center">
    <img src="/images/shield1.png" alt="drawing" width="250"/>
 </p>
-When the shields are supercharged they will block **ALL** projectiles in a wide area, so make sure your shots are hitting the right answers and targets!
+When the shields are supercharged they will block **ALL** projectiles in a wide area, so make sure your shots are hitting the right answers and targets! Do note that you can either make the choice of shooting an incorrect shot, or backspacing to clear your inputs.
 
 
 # Game Mechanics
 
-Playing the game will earn you points based on the amount of enemies shot down, so basically the more enemies you take down the more points you get. As you push further into the enemies, you'll find that they get more advanced, leading to more difficult shield structures (aka more difficult math problems), and more plentiful enemies, take out as many as you can before you let any get by. You have 3 "lives" in this game so make them count, and achieve the highest scores you can. You'll be competing against your own personal scores as well as the scores of other players. 
+Playing the game will earn you points based on the amount of enemies shot down, so basically the more enemies you take down the more points you get. As you push further into the enemies, you'll find that they get more advanced, leading to more difficult shield structures (aka more difficult math problems), and more plentiful enemies, take out as many as you can before you let any get by. You have 4 "lives" in this game that will be lost if an enemy gets past you, you'll lose one of them, so do some math and achieve the highest scores you can. You'll be competing against your own personal scores as well as the scores of other players. 
+
+Best of luck to you, have fun.
