@@ -825,7 +825,7 @@ class GameView(arcade.View):
         for laser in self.lasers:
             if not laser.alive:
                 self.lasers.remove(laser)
-        #reduces Shield life (acts as a timer) removes if at zero
+        #reduces Shield life (acts as a timer) removes if at zero; life reduction can be assigned to variable to have adaptive difficulty
         for shield in self.shields:
             shield.life -=2
             if shield.life <=0:
